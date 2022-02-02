@@ -1,0 +1,33 @@
+<launch>
+  <arg name="mav_name" default="hummingbird"/>
+  <arg name="world_name" default="basic"/>
+
+  <!-- Parameters of ROS -->
+  <arg name="use_sim_time" default="true"/>
+  <arg name="frequency" default="1000"/>
+
+  <param name="use_sim_time" value="$(arg use_sim_time)" />
+
+  <!-- Start gazebo and spawn drone-->
+  <include file="$(find quad_control)/launch/start_spawn_mav.launch">
+    <arg name="mav_name" value="$(arg mav_name)" />
+    <arg name="world_name" default="$(arg world_name)"/>
+  </include>
+
+  <!-- Start odometry -->
+  <include file="$(find quad_control)/launch/start_odometry.launch">
+    <arg name="mav_name"   default="$(arg mav_name)"/>
+    <arg name="frequency"  default="$(arg frequency)"/>
+  </include>
+
+  <!-- Start controller --> 
+  <include file="$(find quad_control)/launch/start_passive_controller.launch">
+    <arg name="mav_name" value="$(arg mav_name)" />
+    <arg name="frequency" default="$(arg frequency)"/>
+  </include>
+
+  <!-- Start PlotJuggler -->
+  <node name="plotjuggler" pkg="plotjuggler" type="plotjuggler"
+    args="--layout $(find quad_control)/config/plotJugglerConfig_testController.xml"
+  />
+</launch>

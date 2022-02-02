@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<launch>
+  <arg name="mav_name"  default=""/>
+  <arg name="frequency" default=""/>
+
+  <node name="OdometryNode" type="OdometryNode" pkg="quad_control">
+    <remap from="/odometry"     to="/$(arg mav_name)/ground_truth/odometry"/>
+    <remap from="/odometryNED"  to="/$(arg mav_name)/odometryNED"/>
+  </node>
+</launch>
