@@ -153,10 +153,7 @@ link_directories(${GAZEBO_LIBRARY_DIRS})
 #      FILES
 #)
 
-add_library(Utility           src/Utils/Utility/utility.cpp)
-add_library(Filter            src/Utils/Filter/Filter.cpp)
-add_library(LP2Filter         src/Utils/Filter/LP2Filter.cpp)
-add_library(Drone             src/Utils/Drone/Drone.cpp)
+add_library(Differentiator  src/Utils/Filter/Differentiator.cpp)
 
 ## Add cmake target dependencies of the library
 ## as an example, code may need to be generated before libraries
@@ -172,8 +169,8 @@ add_library(Drone             src/Utils/Drone/Drone.cpp)
 #target_link_libraries(Drone Utility ${Eigen_INCLUDE_DIRS} ${catkin_LIBRARIES})
 #target_link_libraries(Controller Drone LP2Filter Filter Utility ${Eigen_INCLUDE_DIRS} ${catkin_LIBRARIES})
 
-add_executable(OdometryNode src/Nodes/startOdometryNode.cpp)
-target_link_libraries(OdometryNode ${Eigen_INCLUDE_DIRS} ${catkin_LIBRARIES})
+add_executable(OdometryNode src/Nodes/odometry_node.cpp)
+target_link_libraries(OdometryNode Differentiator ${Eigen_INCLUDE_DIRS} ${catkin_LIBRARIES})
 
-add_executable(OuterLoopControllerNode src/Nodes/startOuterLoopControllerNode.cpp)
-target_link_libraries(OuterLoopControllerNode ${Eigen_INCLUDE_DIRS} ${catkin_LIBRARIES})
+#add_executable(OuterLoopControllerNode src/Nodes/startOuterLoopControllerNode.cpp)
+#target_link_libraries(OuterLoopControllerNode ${Eigen_INCLUDE_DIRS} ${catkin_LIBRARIES})
