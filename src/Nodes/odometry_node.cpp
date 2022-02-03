@@ -62,13 +62,16 @@ int main(int argc, char **argv)
 {
     ros::init(argc, argv, "odometryNode");
     ros::NodeHandle nh("~");
-    ros::Rate rate(1000);
+
+    double kf = nh.param<double>("kf", 100);
+    double Ts = nh.param<double>("Ts", 0.001);
+    ros::Rate rate(1/Ts);
 
     odomSub = nh.subscribe("/odometry", 1, odomCallback);
     odomPub = nh.advertise<quad_control::UavState>("/odometryNED", 1);
 
-    pFilter.DifferentiatorInit( 200, 0.001);
-    etaFilter.DifferentiatorInit( 200, 0.001);
+    pFilter.DifferentiatorInit( kf, Ts );
+    etaFilter.DifferentiatorInit( kf, Ts );
     
     while(ros::ok()) {
         ros::spinOnce();
