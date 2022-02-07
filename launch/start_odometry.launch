@@ -1,9 +1,0 @@
-<?xml version="1.0"?>
-<launch>
-  <node name="OdometryNode" type="OdometryNode" pkg="quad_control">
-    <remap from="/odometry"     to="/$(arg mav_name)/ground_truth/odometry"/>
-    <remap from="/odometryNED"  to="/$(arg mav_name)/odometryNED"/>
-    <arg name="kf" default="200"/>
-    <arg name="Ts" default="0.001"/>
-  </node>
-</launch>
