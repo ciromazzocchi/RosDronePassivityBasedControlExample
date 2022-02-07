@@ -10,7 +10,10 @@
 geometry_msgs::Vector3 msg;
 ros::Subscriber outerloop_sub_1;
 ros::Subscriber outerloop_sub_2;
-ros::Publisher  outerloop_pub;
+ros::Publisher  outerloop_pub_1;
+ros::Publisher  outerloop_pub_2;
+ros::Publisher  outerloop_pub_3;
+ros::Publisher  outerloop_pub_4;
 
 double m;
 Eigen::Vector3d force_est, p_d, p_dot_d, p_dot_dot_d;
@@ -26,14 +29,26 @@ void outerloop_callback_1(const quad_control::UavState::ConstPtr& odom_msg) {
                                                     odom_msg->twist.linear.y,
                                                     odom_msg->twist.linear.z);
 
-    Eigen::Vector3d e       = p - p_d;
-    Eigen::Vector3d e_dot   = p_dot - p_dot_d;
+    Eigen::Vector3d p_dot_dot   = Eigen::Vector3d(  odom_msg->wrench.linear.x,
+                                                    odom_msg->wrench.linear.y,
+                                                    odom_msg->wrench.linear.z);
+
+    Eigen::Vector3d e           = p         - p_d;
+    Eigen::Vector3d e_dot       = p_dot     - p_dot_d;
+    Eigen::Vector3d e_dot_dot   = p_dot_dot - p_dot_dot_d;
     Eigen::Vector3d mu = p_dot_dot_d - (1/m)*(Kp*e + Kd*e_dot)  - (1/m)*force_est;
 
     if(mu[2] >  0.90) mu[2] =  0.90;
     if(mu[2] < -0.90) mu[2] = -0.90;
 
     tf::vectorEigenToMsg(mu, msg);
+    outerloop_pub_1.publish(msg);
+    tf::vectorEigenToMsg(e, msg);
+    outerloop_pub_2.publish(msg);
+    tf::vectorEigenToMsg(e_dot, msg);
+    outerloop_pub_3.publish(msg);
+    tf::vectorEigenToMsg(e_dot_dot, msg);
+    outerloop_pub_4.publish(msg);
 }
 
 void outerloop_callback_2(const geometry_msgs::Wrench::ConstPtr& force_msg) {
@@ -60,11 +75,13 @@ int main(int argc, char **argv)
 
     outerloop_sub_1 = nh.subscribe("/odometryNED", 1, outerloop_callback_1);
     outerloop_sub_2 = nh.subscribe("/wrenchEstimator", 1, outerloop_callback_2);
-    outerloop_pub   = nh.advertise<geometry_msgs::Vector3>("/mu_hat", 1);
+    outerloop_pub_1   = nh.advertise<geometry_msgs::Vector3>("/mu_hat", 1);
+    outerloop_pub_2   = nh.advertise<geometry_msgs::Vector3>("/error_pose", 1);
+    outerloop_pub_3   = nh.advertise<geometry_msgs::Vector3>("/error_twist", 1);
+    outerloop_pub_4   = nh.advertise<geometry_msgs::Vector3>("/error_wrench", 1);
     
     while(ros::ok()) {
         ros::spinOnce();
-        outerloop_pub.publish(msg);
         rate.sleep();
     }
 
