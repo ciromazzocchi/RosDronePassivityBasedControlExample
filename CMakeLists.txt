@@ -169,8 +169,8 @@ add_library(Differentiator  src/Utils/Filter/Differentiator.cpp)
 #target_link_libraries(Drone Utility ${Eigen_INCLUDE_DIRS} ${catkin_LIBRARIES})
 #target_link_libraries(Controller Drone LP2Filter Filter Utility ${Eigen_INCLUDE_DIRS} ${catkin_LIBRARIES})
 
-add_executable(OdometryNode src/Nodes/odometry_node.cpp)
-target_link_libraries(OdometryNode Differentiator ${Eigen_INCLUDE_DIRS} ${catkin_LIBRARIES})
+add_executable(odometry_node src/Nodes/odometry_node.cpp)
+target_link_libraries(odometry_node Differentiator ${Eigen_INCLUDE_DIRS} ${catkin_LIBRARIES})
 
-#add_executable(OuterLoopControllerNode src/Nodes/startOuterLoopControllerNode.cpp)
-#target_link_libraries(OuterLoopControllerNode ${Eigen_INCLUDE_DIRS} ${catkin_LIBRARIES})
+add_executable(outer_loop_node src/Nodes/outer_loop_node.cpp)
+target_link_libraries(outer_loop_node ${Eigen_INCLUDE_DIRS} ${catkin_LIBRARIES})
