@@ -3,7 +3,10 @@
   <node name="outer_loop_node" type="outer_loop_node" pkg="quad_control">
     <remap from="/odometryNED"      to="/hummingbird/odometryNED"/>
     <remap from="/wrenchEstimator"  to="/hummingbird/wrenchEstimator"/>
-    <remap from="/mu_hat"  to="/hummingbird/mu_hat"/>
+    <remap from="/error_pose"       to="/hummingbird/error/pose/linear"/>
+    <remap from="/error_twist"      to="/hummingbird/error/twist/linear"/>
+    <remap from="/error_wrench"     to="/hummingbird/error/wrench/linear"/>
+    <remap from="/mu_hat"           to="/hummingbird/mu_hat"/>
     <param name="mass"  type="double"  value="0.68"/>
     <param name="Kp"    type="double"  value="10"/>
     <param name="Kd"    type="double"  value="1"/>
