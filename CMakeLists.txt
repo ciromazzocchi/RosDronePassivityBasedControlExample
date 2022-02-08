@@ -71,7 +71,6 @@ add_message_files(
   FILES
   UAVPose.msg
   DesiredTrajectory.msg
-  LogData.msg
   UavState.msg
 )
 
@@ -153,7 +152,8 @@ link_directories(${GAZEBO_LIBRARY_DIRS})
 #      FILES
 #)
 
-add_library(Differentiator  src/Utils/Filter/Differentiator.cpp)
+add_library(Differentiator  src/Utils/Differentiator.cpp)
+add_library(Utility  src/Utils/utility.cpp)
 
 ## Add cmake target dependencies of the library
 ## as an example, code may need to be generated before libraries
@@ -174,3 +174,6 @@ target_link_libraries(odometry_node Differentiator ${Eigen_INCLUDE_DIRS} ${catki
 
 add_executable(outer_loop_node src/Nodes/outer_loop_node.cpp)
 target_link_libraries(outer_loop_node ${Eigen_INCLUDE_DIRS} ${catkin_LIBRARIES})
+
+add_executable(inner_loop_node src/Nodes/inner_loop_node.cpp)
+target_link_libraries(inner_loop_node Utility Differentiator ${Eigen_INCLUDE_DIRS} ${catkin_LIBRARIES})
