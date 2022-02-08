@@ -80,6 +80,8 @@ int main(int argc, char **argv)
     outerloop_pub_3   = nh.advertise<geometry_msgs::Vector3>("/error_twist", 1);
     outerloop_pub_4   = nh.advertise<geometry_msgs::Vector3>("/error_wrench", 1);
     
+    ros::Duration(2).sleep();
+
     while(ros::ok()) {
         ros::spinOnce();
         rate.sleep();
