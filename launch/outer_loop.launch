@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <launch>
   <node name="outer_loop_node" type="outer_loop_node" pkg="quad_control">
-    <remap from="/odometryNED"      to="/hummingbird/odometryNED"/>
-    <remap from="/wrenchEstimator"  to="/hummingbird/wrenchEstimator"/>
+    <remap from="/odometryNED"      to="/hummingbird/odometryNED/p"/>
+    <remap from="/wrenchEstimator"  to="/hummingbird/wrenchEstimator/force"/>
     <remap from="/error_pose"       to="/hummingbird/error/pose/linear"/>
     <remap from="/error_twist"      to="/hummingbird/error/twist/linear"/>
     <remap from="/error_wrench"     to="/hummingbird/error/wrench/linear"/>

@@ -1,0 +1,5 @@
+<?xml version="1.0"?>
+<launch>
+    <node name="plotjuggler" pkg="plotjuggler" type="plotjuggler" 
+      args="--layout $(find quad_control)/config/plotJugglerConfig.xml" />
+</launch>
