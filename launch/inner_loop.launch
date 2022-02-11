@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <launch>
   <node name="inner_loop_node" type="inner_loop_node" pkg="quad_control">
-    <remap from="/odometry"         to="/hummingbird/odometryNED"/>
-    <remap from="/wrenchEstimator"  to="/hummingbird/wrenchEstimator"/>
+    <remap from="/odometry"         to="/hummingbird/odometryNED/eta"/>
+    <remap from="/wrenchEstimator"  to="/hummingbird/wrenchEstimator/torque"/>
     <remap from="/eta_d"            to="/hummingbird/trajectory"/>
     <remap from="/mu_hat"           to="/hummingbird/mu_hat"/>
     <remap from="/wrenchNED"        to="/hummingbird/command/wrenchNED"/>
