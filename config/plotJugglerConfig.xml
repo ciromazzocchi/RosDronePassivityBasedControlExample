@@ -1,67 +1,58 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <root version="2.3.8">
- <tabbed_widget name="Main Window" parent="main_window">
+ <tabbed_widget parent="main_window" name="Main Window">
   <Tab tab_name="Desired value" containers="1">
    <Container>
-    <DockSplitter count="1" orientation="-" sizes="1">
-     <DockSplitter count="3" orientation="|" sizes="0.333333;0.333333;0.333333">
-      <DockSplitter count="2" orientation="-" sizes="0.5;0.5">
+    <DockSplitter orientation="-" count="1" sizes="1">
+     <DockSplitter orientation="|" count="3" sizes="0.333333;0.333333;0.333333">
+      <DockSplitter orientation="-" count="2" sizes="0.5;0.5">
        <DockArea name="desired pose - Linear">
-        <plot style="Lines" mode="TimeSeries">
-         <range bottom="-0.000000" right="5.145000" top="0.000000" left="0.149000"/>
+        <plot mode="TimeSeries" style="Lines">
+         <range bottom="0.000000" right="1.000000" top="1.000000" left="0.000000"/>
          <limitY/>
-         <curve color="#1f77b4" name="/hummingbird/trajectory/position/x"/>
-         <curve color="#d62728" name="/hummingbird/trajectory/position/y"/>
-         <curve color="#1ac938" name="/hummingbird/trajectory/position/z"/>
         </plot>
        </DockArea>
        <DockArea name="desired pose - Angular">
-        <plot style="Lines" mode="TimeSeries">
-         <range bottom="-0.000000" right="5.145000" top="0.000000" left="0.149000"/>
+        <plot mode="TimeSeries" style="Lines">
+         <range bottom="-0.000000" right="0.794000" top="0.000000" left="0.010000"/>
          <limitY/>
-         <curve color="#1f77b4" name="/hummingbird/trajectory/eta/pose/x"/>
-         <curve color="#d62728" name="/hummingbird/trajectory/eta/pose/y"/>
-         <curve color="#1ac938" name="/hummingbird/trajectory/eta/pose/z"/>
+         <curve name="/hummingbird/trajectory/eta/pose/x" color="#1f77b4"/>
+         <curve name="/hummingbird/trajectory/eta/pose/y" color="#d62728"/>
+         <curve name="/hummingbird/trajectory/eta/pose/z" color="#1ac938"/>
         </plot>
        </DockArea>
       </DockSplitter>
-      <DockSplitter count="2" orientation="-" sizes="0.5;0.5">
+      <DockSplitter orientation="-" count="2" sizes="0.5;0.5">
        <DockArea name="desired twist - Linear ">
-        <plot style="Lines" mode="TimeSeries">
-         <range bottom="-0.000000" right="5.145000" top="0.000000" left="0.149000"/>
+        <plot mode="TimeSeries" style="Lines">
+         <range bottom="0.000000" right="1.000000" top="1.000000" left="0.000000"/>
          <limitY/>
-         <curve color="#1f77b4" name="/hummingbird/trajectory/twist/x"/>
-         <curve color="#d62728" name="/hummingbird/trajectory/twist/y"/>
-         <curve color="#1ac938" name="/hummingbird/trajectory/twist/z"/>
         </plot>
        </DockArea>
        <DockArea name="desired twist - Angular">
-        <plot style="Lines" mode="TimeSeries">
-         <range bottom="-0.000000" right="5.145000" top="0.000000" left="0.149000"/>
+        <plot mode="TimeSeries" style="Lines">
+         <range bottom="-0.000050" right="0.794000" top="0.002062" left="0.010000"/>
          <limitY/>
-         <curve color="#1f77b4" name="/hummingbird/trajectory/eta/twist/x"/>
-         <curve color="#d62728" name="/hummingbird/trajectory/eta/twist/y"/>
-         <curve color="#1ac938" name="/hummingbird/trajectory/eta/twist/z"/>
+         <curve name="/hummingbird/trajectory/eta/twist/x" color="#ff7f0e"/>
+         <curve name="/hummingbird/trajectory/eta/twist/y" color="#f14cc1"/>
+         <curve name="/hummingbird/trajectory/eta/twist/z" color="#9467bd"/>
         </plot>
        </DockArea>
       </DockSplitter>
-      <DockSplitter count="2" orientation="-" sizes="0.5;0.5">
+      <DockSplitter orientation="-" count="2" sizes="0.5;0.5">
        <DockArea name="desired wrench - Linear">
-        <plot style="Lines" mode="TimeSeries">
-         <range bottom="-0.000000" right="5.145000" top="0.000000" left="0.149000"/>
+        <plot mode="TimeSeries" style="Lines">
+         <range bottom="0.000000" right="1.000000" top="1.000000" left="0.000000"/>
          <limitY/>
-         <curve color="#1f77b4" name="/hummingbird/trajectory/wrench/x"/>
-         <curve color="#d62728" name="/hummingbird/trajectory/wrench/y"/>
-         <curve color="#1ac938" name="/hummingbird/trajectory/wrench/z"/>
         </plot>
        </DockArea>
        <DockArea name="desired wrench - Angular">
-        <plot style="Lines" mode="TimeSeries">
-         <range bottom="-0.000000" right="5.145000" top="0.000000" left="0.149000"/>
+        <plot mode="TimeSeries" style="Lines">
+         <range bottom="-0.008330" right="0.794000" top="0.000203" left="0.010000"/>
          <limitY/>
-         <curve color="#1f77b4" name="/hummingbird/trajectory/eta/wrench/x"/>
-         <curve color="#d62728" name="/hummingbird/trajectory/eta/wrench/y"/>
-         <curve color="#1ac938" name="/hummingbird/trajectory/eta/wrench/z"/>
+         <curve name="/hummingbird/trajectory/eta/wrench/x" color="#17becf"/>
+         <curve name="/hummingbird/trajectory/eta/wrench/y" color="#bcbd22"/>
+         <curve name="/hummingbird/trajectory/eta/wrench/z" color="#1f77b4"/>
         </plot>
        </DockArea>
       </DockSplitter>
@@ -71,62 +62,44 @@
   </Tab>
   <Tab tab_name="State" containers="1">
    <Container>
-    <DockSplitter count="2" orientation="-" sizes="0.5;0.5">
-     <DockSplitter count="3" orientation="|" sizes="0.336957;0.336957;0.326087">
+    <DockSplitter orientation="-" count="2" sizes="0.5;0.5">
+     <DockSplitter orientation="|" count="2" sizes="0.500493;0.499507">
       <DockArea name="Pose - Linear">
-       <plot style="Lines" mode="TimeSeries">
-        <range bottom="-0.061500" right="5.000000" top="0.001500" left="0.003000"/>
+       <plot mode="TimeSeries" style="Lines">
+        <range bottom="-16.046898" right="0.794000" top="0.391388" left="0.010000"/>
         <limitY/>
-        <curve color="#1f77b4" name="/hummingbird/odometryNED/p/pose/x"/>
-        <curve color="#d62728" name="/hummingbird/odometryNED/p/pose/y"/>
-        <curve color="#1ac938" name="/hummingbird/odometryNED/p/pose/z"/>
+        <curve name="/hummingbird/odometryNED/pose/pose/position/x" color="#1f77b4"/>
+        <curve name="/hummingbird/odometryNED/pose/pose/position/y" color="#d62728"/>
+        <curve name="/hummingbird/odometryNED/pose/pose/position/z" color="#1ac938"/>
        </plot>
       </DockArea>
       <DockArea name="Twist - Linear">
-       <plot style="Lines" mode="TimeSeries">
-        <range bottom="-0.000000" right="5.000000" top="0.000000" left="0.003000"/>
+       <plot mode="TimeSeries" style="Lines">
+        <range bottom="-14.733348" right="0.794000" top="0.359350" left="0.010000"/>
         <limitY/>
-        <curve color="#ff7f0e" name="/hummingbird/odometryNED/p/twist/x"/>
-        <curve color="#f14cc1" name="/hummingbird/odometryNED/p/twist/y"/>
-        <curve color="#9467bd" name="/hummingbird/odometryNED/p/twist/z"/>
-       </plot>
-      </DockArea>
-      <DockArea name="Wrench - Linear">
-       <plot style="Lines" mode="TimeSeries">
-        <range bottom="-0.000000" right="5.000000" top="0.000000" left="0.003000"/>
-        <limitY/>
-        <curve color="#17becf" name="/hummingbird/odometryNED/p/wrench/x"/>
-        <curve color="#bcbd22" name="/hummingbird/odometryNED/p/wrench/y"/>
-        <curve color="#1f77b4" name="/hummingbird/odometryNED/p/wrench/z"/>
+        <curve name="/hummingbird/odometryNED/twist/twist/linear/x" color="#17becf"/>
+        <curve name="/hummingbird/odometryNED/twist/twist/linear/y" color="#bcbd22"/>
+        <curve name="/hummingbird/odometryNED/twist/twist/linear/z" color="#1f77b4"/>
        </plot>
       </DockArea>
      </DockSplitter>
-     <DockSplitter count="3" orientation="|" sizes="0.336957;0.336957;0.326087">
+     <DockSplitter orientation="|" count="2" sizes="0.500493;0.499507">
       <DockArea name="Pose - Angular">
-       <plot style="Lines" mode="TimeSeries">
-        <range bottom="-0.000000" right="5.000000" top="0.000000" left="0.003000"/>
+       <plot mode="TimeSeries" style="Lines">
+        <range bottom="-3.298672" right="0.794000" top="3.298672" left="0.010000"/>
         <limitY/>
-        <curve color="#d62728" name="/hummingbird/odometryNED/eta/pose/x"/>
-        <curve color="#1ac938" name="/hummingbird/odometryNED/eta/pose/y"/>
-        <curve color="#ff7f0e" name="/hummingbird/odometryNED/eta/pose/z"/>
+        <curve name="/hummingbird/odometryNED/pose/pose/orientation/x" color="#ff7f0e"/>
+        <curve name="/hummingbird/odometryNED/pose/pose/orientation/y" color="#f14cc1"/>
+        <curve name="/hummingbird/odometryNED/pose/pose/orientation/z" color="#9467bd"/>
        </plot>
       </DockArea>
       <DockArea name="Twist - Angular">
-       <plot style="Lines" mode="TimeSeries">
-        <range bottom="-0.000000" right="5.000000" top="0.000000" left="0.003000"/>
+       <plot mode="TimeSeries" style="Lines">
+        <range bottom="-0.558128" right="0.794000" top="22.883242" left="0.010000"/>
         <limitY/>
-        <curve color="#f14cc1" name="/hummingbird/odometryNED/eta/twist/x"/>
-        <curve color="#9467bd" name="/hummingbird/odometryNED/eta/twist/y"/>
-        <curve color="#17becf" name="/hummingbird/odometryNED/eta/twist/z"/>
-       </plot>
-      </DockArea>
-      <DockArea name="Wrench - Angular">
-       <plot style="Lines" mode="TimeSeries">
-        <range bottom="-0.000000" right="5.000000" top="0.000000" left="0.003000"/>
-        <limitY/>
-        <curve color="#bcbd22" name="/hummingbird/odometryNED/eta/wrench/x"/>
-        <curve color="#1f77b4" name="/hummingbird/odometryNED/eta/wrench/y"/>
-        <curve color="#d62728" name="/hummingbird/odometryNED/eta/wrench/z"/>
+        <curve name="/hummingbird/odometryNED/twist/twist/angular/x" color="#d62728"/>
+        <curve name="/hummingbird/odometryNED/twist/twist/angular/y" color="#1ac938"/>
+        <curve name="/hummingbird/odometryNED/twist/twist/angular/z" color="#ff7f0e"/>
        </plot>
       </DockArea>
      </DockSplitter>
@@ -135,54 +108,51 @@
   </Tab>
   <Tab tab_name="Error" containers="1">
    <Container>
-    <DockSplitter count="1" orientation="-" sizes="1">
-     <DockSplitter count="3" orientation="|" sizes="0.336957;0.336957;0.326087">
-      <DockSplitter count="2" orientation="-" sizes="0.5;0.5">
+    <DockSplitter orientation="-" count="1" sizes="1">
+     <DockSplitter orientation="|" count="3" sizes="0.333333;0.333333;0.333333">
+      <DockSplitter orientation="-" count="2" sizes="0.5;0.5">
        <DockArea name="Pose - Linear">
-        <plot style="Lines" mode="TimeSeries">
-         <range bottom="-0.000000" right="5.000000" top="0.000000" left="0.003000"/>
+        <plot mode="TimeSeries" style="Lines">
+         <range bottom="-15.926505" right="0.794000" top="0.388451" left="0.010000"/>
          <limitY/>
-         <curve color="#1f77b4" name="/hummingbird/error/pose/linear/x"/>
-         <curve color="#d62728" name="/hummingbird/error/pose/linear/y"/>
-         <curve color="#1ac938" name="/hummingbird/error/pose/linear/z"/>
+         <curve name="/hummingbird/error/pose/linear/vector/x" color="#1f77b4"/>
+         <curve name="/hummingbird/error/pose/linear/vector/y" color="#d62728"/>
+         <curve name="/hummingbird/error/pose/linear/vector/z" color="#1ac938"/>
         </plot>
        </DockArea>
        <DockArea name="Pose - Angular">
-        <plot style="Lines" mode="TimeSeries">
+        <plot mode="TimeSeries" style="Lines">
          <range bottom="0.000000" right="1.000000" top="1.000000" left="0.000000"/>
          <limitY/>
         </plot>
        </DockArea>
       </DockSplitter>
-      <DockSplitter count="2" orientation="-" sizes="0.5;0.5">
+      <DockSplitter orientation="-" count="2" sizes="0.5;0.5">
        <DockArea name="Twist - Linear">
-        <plot style="Lines" mode="TimeSeries">
-         <range bottom="-0.000000" right="5.000000" top="0.000000" left="0.003000"/>
+        <plot mode="TimeSeries" style="Lines">
+         <range bottom="-14.706180" right="0.794000" top="0.358687" left="0.010000"/>
          <limitY/>
-         <curve color="#ff7f0e" name="/hummingbird/error/twist/linear/x"/>
-         <curve color="#f14cc1" name="/hummingbird/error/twist/linear/y"/>
-         <curve color="#9467bd" name="/hummingbird/error/twist/linear/z"/>
+         <curve name="/hummingbird/error/twist/linear/vector/x" color="#ff7f0e"/>
+         <curve name="/hummingbird/error/twist/linear/vector/y" color="#f14cc1"/>
+         <curve name="/hummingbird/error/twist/linear/vector/z" color="#9467bd"/>
         </plot>
        </DockArea>
        <DockArea name="Twist - Angular">
-        <plot style="Lines" mode="TimeSeries">
+        <plot mode="TimeSeries" style="Lines">
          <range bottom="0.000000" right="1.000000" top="1.000000" left="0.000000"/>
          <limitY/>
         </plot>
        </DockArea>
       </DockSplitter>
-      <DockSplitter count="2" orientation="-" sizes="0.5;0.5">
+      <DockSplitter orientation="-" count="2" sizes="0.5;0.5">
        <DockArea name="Wrench - Linear">
-        <plot style="Lines" mode="TimeSeries">
-         <range bottom="-0.000000" right="5.000000" top="0.000000" left="0.003000"/>
+        <plot mode="TimeSeries" style="Lines">
+         <range bottom="0.000000" right="1.000000" top="1.000000" left="0.000000"/>
          <limitY/>
-         <curve color="#17becf" name="/hummingbird/error/wrench/linear/x"/>
-         <curve color="#bcbd22" name="/hummingbird/error/wrench/linear/y"/>
-         <curve color="#1f77b4" name="/hummingbird/error/wrench/linear/z"/>
         </plot>
        </DockArea>
        <DockArea name="Wrench - Angular">
-        <plot style="Lines" mode="TimeSeries">
+        <plot mode="TimeSeries" style="Lines">
          <range bottom="0.000000" right="1.000000" top="1.000000" left="0.000000"/>
          <limitY/>
         </plot>
@@ -194,23 +164,23 @@
   </Tab>
   <Tab tab_name="Estimated Wrench" containers="1">
    <Container>
-    <DockSplitter count="2" orientation="-" sizes="0.5;0.5">
+    <DockSplitter orientation="-" count="2" sizes="0.5;0.5">
      <DockArea name="Linear">
-      <plot style="Lines" mode="TimeSeries">
-       <range bottom="-0.100000" right="5.000000" top="0.100000" left="0.003000"/>
+      <plot mode="TimeSeries" style="Lines">
+       <range bottom="-0.100000" right="0.794000" top="0.100000" left="0.010000"/>
        <limitY/>
-       <curve color="#ff0000" name="/hummingbird/controller/logData/estimatedWrench/linear/x"/>
-       <curve color="#00ff00" name="/hummingbird/controller/logData/estimatedWrench/linear/y"/>
-       <curve color="#0000ff" name="/hummingbird/controller/logData/estimatedWrench/linear/z"/>
+       <curve name="/hummingbird/controller/logData/estimatedWrench/linear/x" color="#ff0000"/>
+       <curve name="/hummingbird/controller/logData/estimatedWrench/linear/y" color="#00ff00"/>
+       <curve name="/hummingbird/controller/logData/estimatedWrench/linear/z" color="#0000ff"/>
       </plot>
      </DockArea>
      <DockArea name="Angular">
-      <plot style="Lines" mode="TimeSeries">
-       <range bottom="-0.100000" right="5.000000" top="0.100000" left="0.003000"/>
+      <plot mode="TimeSeries" style="Lines">
+       <range bottom="-0.100000" right="0.794000" top="0.100000" left="0.010000"/>
        <limitY/>
-       <curve color="#ff0000" name="/hummingbird/controller/logData/estimatedWrench/angular/x"/>
-       <curve color="#00ff00" name="/hummingbird/controller/logData/estimatedWrench/angular/y"/>
-       <curve color="#0000ff" name="/hummingbird/controller/logData/estimatedWrench/angular/z"/>
+       <curve name="/hummingbird/controller/logData/estimatedWrench/angular/x" color="#ff0000"/>
+       <curve name="/hummingbird/controller/logData/estimatedWrench/angular/y" color="#00ff00"/>
+       <curve name="/hummingbird/controller/logData/estimatedWrench/angular/z" color="#0000ff"/>
       </plot>
      </DockArea>
     </DockSplitter>
@@ -218,24 +188,27 @@
   </Tab>
   <Tab tab_name="Propellers" containers="1">
    <Container>
-    <DockSplitter count="3" orientation="-" sizes="0.332762;0.334477;0.332762">
+    <DockSplitter orientation="-" count="3" sizes="0.332762;0.334477;0.332762">
      <DockArea name="mu">
-      <plot style="Lines" mode="TimeSeries">
-       <range bottom="-0.000000" right="5.000000" top="0.000000" left="0.003000"/>
+      <plot mode="TimeSeries" style="Lines">
+       <range bottom="-0.225000" right="0.794000" top="9.225000" left="0.010000"/>
        <limitY/>
-       <curve color="#1f77b4" name="/hummingbird/mu_hat/x"/>
-       <curve color="#d62728" name="/hummingbird/mu_hat/y"/>
-       <curve color="#1ac938" name="/hummingbird/mu_hat/z"/>
+       <curve name="/hummingbird/mu_hat/x" color="#1f77b4"/>
+       <curve name="/hummingbird/mu_hat/y" color="#d62728"/>
+       <curve name="/hummingbird/mu_hat/z" color="#1ac938"/>
+       <curve name="/hummingbird/mu_hat/vector/x" color="#1f77b4"/>
+       <curve name="/hummingbird/mu_hat/vector/y" color="#d62728"/>
+       <curve name="/hummingbird/mu_hat/vector/z" color="#1ac938"/>
       </plot>
      </DockArea>
      <DockArea name="uT">
-      <plot style="Lines" mode="TimeSeries">
+      <plot mode="TimeSeries" style="Lines">
        <range bottom="0.000000" right="1.000000" top="1.000000" left="0.000000"/>
        <limitY/>
       </plot>
      </DockArea>
      <DockArea name="tau">
-      <plot style="Lines" mode="TimeSeries">
+      <plot mode="TimeSeries" style="Lines">
        <range bottom="0.000000" right="1.000000" top="1.000000" left="0.000000"/>
        <limitY/>
       </plot>
@@ -243,7 +216,7 @@
     </DockSplitter>
    </Container>
   </Tab>
-  <currentTabIndex index="0"/>
+  <currentTabIndex index="4"/>
  </tabbed_widget>
  <use_relative_time_offset enabled="1"/>
  <!-- - - - - - - - - - - - - - - -->

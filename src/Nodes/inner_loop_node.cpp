@@ -1,62 +1,33 @@
 #include "ros/ros.h"
 
-#include "../Utils/Differentiator.hpp"
 #include "../Utils/utility.hpp"
 #include "quad_control/UavState.h"
-#include "quad_control/DesiredTrajectory.h"
+#include "nav_msgs/Odometry.h"
 
-#include <Eigen/Dense>
-#include <tf/LinearMath/Matrix3x3.h>
 #include <tf_conversions/tf_eigen.h>
 #include <eigen_conversions/eigen_msg.h>
-
-Differentiator<Eigen::Vector3d> eta_dot_filter;
-Differentiator<Eigen::Vector3d> eta_dot_dot_filter;
 
 ros::Subscriber il_odom_sub, il_wrench_est_sub, il_eta_d_sub, il_mu_hat_sub;
 ros::Publisher  il_cmd_pub;
 ros::Publisher  il_e_eta_pub;
 ros::Publisher  il_e_eta_d_pub;
-ros::Publisher  il_e_eta_dd_pub;
 
-double m, psi_d, v;
-Eigen::Vector3d eta,eta_dot, eta_dot_dot, tau_est;
+double m, psi_d, v, uT;
+Eigen::Vector3d eta, eta_dot, tau_est;
+Eigen::Vector3d eta_d,eta_dot_d,eta_dot_dot_d;
 Eigen::Matrix3d Kp, Kd, I;
 
-void il_cb_1(const quad_control::UavState::ConstPtr& odom_msg) {
-    eta <<  odom_msg->pose.x, odom_msg->pose.y, odom_msg->pose.z;
+void odom_cb(const nav_msgs::Odometry::ConstPtr& odom_msg) {
+    eta <<  odom_msg->pose.pose.position.x,
+        odom_msg->pose.pose.position.y,
+        odom_msg->pose.pose.position.z;
     
-    eta_dot <<  odom_msg->twist.x, odom_msg->twist.y, odom_msg->twist.z;
-
-    eta_dot_dot <<  odom_msg->wrench.x, odom_msg->wrench.y, odom_msg->wrench.z;
-}
-
-void il_cb_2(const geometry_msgs::Vector3::ConstPtr& tau_msg) {
-    tau_est << tau_msg->x, tau_msg->y, tau_msg->z;
-}
-
-void il_cb_3(const quad_control::DesiredTrajectory::ConstPtr& traj_msg) {
-    psi_d = traj_msg->position.yaw;
-}
-
-void il_cb_4(const geometry_msgs::Vector3Stamped::ConstPtr& mu_hat_msg) {
-    Eigen::Vector3d mu_hat = Eigen::Vector3d( mu_hat_msg->vector.x,
-                                    mu_hat_msg->vector.y, mu_hat_msg->vector.z);
-
-    double uT = m*sqrt( mu_hat.transpose() * mu_hat);
-
-    double phi_d = asin( ( mu_hat(1)*cos(psi_d) - mu_hat(0)*sin(psi_d) ) /
-                    ( sqrt( mu_hat.transpose() * mu_hat) ));
-    
-    double theta_d = atan2( mu_hat(0)*cos(psi_d) + mu_hat(1)*sin(psi_d), mu_hat(2));
-
-    Eigen::Vector3d eta_d = Eigen::Vector3d(phi_d,theta_d,psi_d);
-    Eigen::Vector3d eta_dot_d = eta_dot_filter.getDifferentiatoredValue(eta_d);
-    Eigen::Vector3d eta_dot_dot_d = eta_dot_filter.getDifferentiatoredValue(eta_dot_d);
+    eta_dot <<  odom_msg->twist.twist.angular.x,
+        odom_msg->twist.twist.angular.y,
+        odom_msg->twist.twist.angular.z;
 
     Eigen::Vector3d e         = eta         - eta_d;
     Eigen::Vector3d e_dot     = eta_dot     - eta_dot_d;
-    Eigen::Vector3d e_dot_dot = eta_dot_dot - eta_dot_dot_d;
 
     Eigen::Vector3d eta_r_dot     = eta_dot_d - v*e;
     Eigen::Vector3d eta_r_dot_dot = eta_dot_dot_d - v*e_dot;
@@ -67,18 +38,46 @@ void il_cb_4(const geometry_msgs::Vector3Stamped::ConstPtr& mu_hat_msg) {
         M(eta,I)*eta_r_dot_dot + C(eta,eta_dot, I)*eta_r_dot - tau_est - Kd*v_eta - Kp*e
     );
 
-    geometry_msgs::Wrench msg;
-    tf::vectorEigenToMsg(Eigen::Vector3d(0,0,uT), msg.force);
-    tf::vectorEigenToMsg(tau_b, msg.torque);
-    il_cmd_pub.publish(msg);
+//    geometry_msgs::Wrench msg;
+//    tf::vectorEigenToMsg(Eigen::Vector3d(0,0,uT), msg.force);
+//    tf::vectorEigenToMsg(tau_b, msg.torque);
+//    il_cmd_pub.publish(msg);
     geometry_msgs::Vector3Stamped vec_msg;
-    vec_msg.header = mu_hat_msg->header;
-    tf::vectorEigenToMsg(e, vec_msg.vector);
+    vec_msg.header = odom_msg->header;
+    vec_msg.vector.x = e.x();
+    vec_msg.vector.y = e.y();
+    vec_msg.vector.z = e.z();
     il_e_eta_pub.publish(vec_msg.vector);
-    tf::vectorEigenToMsg(e_dot, vec_msg.vector);
+    
+    vec_msg.vector.x = e_dot.x();
+    vec_msg.vector.y = e_dot.y();
+    vec_msg.vector.z = e_dot.z();
     il_e_eta_d_pub.publish(vec_msg.vector);
-    tf::vectorEigenToMsg(e_dot_dot, vec_msg.vector);
-    il_e_eta_dd_pub.publish(vec_msg);
+}
+
+void wrench_est_cb(const geometry_msgs::Wrench::ConstPtr& tau_msg) {
+    tau_est << tau_msg->torque.x, tau_msg->torque.y, tau_msg->torque.z;
+}
+
+void eta_d_cb(const quad_control::UavState::ConstPtr& traj_msg) {
+    eta_d << traj_msg->pose.x,
+        traj_msg->pose.y,
+        traj_msg->pose.z;
+
+    eta_dot_d << traj_msg->twist.x,
+            traj_msg->twist.y,
+            traj_msg->twist.z;
+    
+    eta_dot_dot_d << traj_msg->wrench.x,
+            traj_msg->wrench.y,
+            traj_msg->wrench.z;
+}
+
+void mu_hat_cb(const geometry_msgs::Vector3Stamped::ConstPtr& mu_hat_msg) {
+    Eigen::Vector3d mu_hat = Eigen::Vector3d( mu_hat_msg->vector.x,
+                                    mu_hat_msg->vector.y, mu_hat_msg->vector.z);
+
+    uT = m*sqrt( mu_hat.transpose() * mu_hat);
 }
 
 int main(int argc, char **argv)
@@ -97,23 +96,25 @@ int main(int argc, char **argv)
                         nh.param<double>("Izz", 0.1)).asDiagonal();
     tau_est     = Eigen::Vector3d::Zero();
     psi_d = 0;
-    
+
+    eta_d           = Eigen::Vector3d::Zero();
+    eta_dot_d       = Eigen::Vector3d::Zero();
+    eta_dot_dot_d   = Eigen::Vector3d::Zero();
+
+    eta             = Eigen::Vector3d::Zero();
+    eta_dot         = Eigen::Vector3d::Zero();
+
     v = nh.param<double>("v", 10);
 
-    double kf = nh.param<double>("kf", 100);
-    eta_dot_filter.DifferentiatorInit( kf, Ts );
-    eta_dot_dot_filter.DifferentiatorInit( kf, Ts );
-
-    il_odom_sub         = nh.subscribe("/odometry", 1, il_cb_1);
-    il_wrench_est_sub   = nh.subscribe("/wrenchEstimator", 1, il_cb_2);
-    il_eta_d_sub        = nh.subscribe("/eta_d", 1, il_cb_3);
-    il_mu_hat_sub       = nh.subscribe("/mu_hat", 1, il_cb_4);
+    il_odom_sub         = nh.subscribe("/odometry", 1, odom_cb);
+    il_wrench_est_sub   = nh.subscribe("/wrenchEstimator", 1, wrench_est_cb);
+    il_eta_d_sub        = nh.subscribe("/eta_d", 1, eta_d_cb);
+    il_mu_hat_sub       = nh.subscribe("/mu_hat", 1, mu_hat_cb);
     il_cmd_pub          = nh.advertise<geometry_msgs::Wrench>("/wrenchNED", 1);
     il_e_eta_pub        = nh.advertise<geometry_msgs::Vector3Stamped>("/error_pose", 1);
     il_e_eta_d_pub      = nh.advertise<geometry_msgs::Vector3Stamped>("/error_twist", 1);
-    il_e_eta_dd_pub     = nh.advertise<geometry_msgs::Vector3Stamped>("/error_wrench", 1);
     
-    ros::Duration(0.03).sleep();
+    ros::Duration(0.1).sleep();
 
     while(ros::ok()) {
         ros::spinOnce();

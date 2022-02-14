@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <launch>
   <node name="eta_reference_node" type="eta_reference_node" pkg="quad_control">
-    <remap from="/eta_odometry"   to="/hummingbird/odometryNED/eta"/>
+    <remap from="/odometry"       to="/hummingbird/odometryNED"/>
     <remap from="/eta_d"          to="/hummingbird/trajectory"/>
     <remap from="/mu_hat"         to="/hummingbird/mu_hat"/>
     <remap from="/eta_reference"  to="/hummingbird/trajectory/eta"/>

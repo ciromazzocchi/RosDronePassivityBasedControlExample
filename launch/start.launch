@@ -50,6 +50,7 @@
     <include file="$(find quad_control)/launch/eta_reference.launch"/>
 
     <include file="$(find quad_control)/launch/inner_loop.launch" />
+
     <!--
       <node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)"  />
     -->

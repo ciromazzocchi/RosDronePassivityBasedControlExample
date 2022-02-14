@@ -1,7 +1,5 @@
 #include "ros/ros.h"
 #include "nav_msgs/Odometry.h"
-#include "quad_control/UavState.h"
-#include "../Utils/Differentiator.hpp"
 
 #include <Eigen/Dense>
 #include <tf/LinearMath/Matrix3x3.h>
@@ -9,10 +7,7 @@
 #include <eigen_conversions/eigen_msg.h>
 
 ros::Subscriber odometry_sub;
-ros::Publisher odometry_p_pub, odometry_eta_pub;
-
-Differentiator<Eigen::Vector3d> pFilter;
-Differentiator<Eigen::Vector3d> etaFilter;
+ros::Publisher  odometry_pub;
 
 void odomCallback(const nav_msgs::Odometry::ConstPtr& odom) {
     
@@ -40,21 +35,29 @@ void odomCallback(const nav_msgs::Odometry::ConstPtr& odom) {
                                                 odom->twist.twist.angular.z);
     etaDot = RbNed*etaDot;
 
-    Eigen::Vector3d pDotDot     = pFilter.getDifferentiatoredValue(pDot);
-    Eigen::Vector3d etaDotDot   = etaFilter.getDifferentiatoredValue(etaDot);
-
-    quad_control::UavState msg;
+    
+    nav_msgs::Odometry msg;
     
     msg.header = odom->header;
-    tf::vectorEigenToMsg(p,msg.pose);
-    tf::vectorEigenToMsg(pDot,msg.twist);
-    tf::vectorEigenToMsg(pDotDot,msg.wrench);
-    odometry_p_pub.publish(msg);
 
-    tf::vectorEigenToMsg(eta,msg.pose);
-    tf::vectorEigenToMsg(etaDot,msg.twist);
-    tf::vectorEigenToMsg(etaDotDot,msg.wrench);
-    odometry_eta_pub.publish(msg);
+    msg.pose.pose.position.x = p.x();
+    msg.pose.pose.position.y = p.y();
+    msg.pose.pose.position.z = p.z();
+
+    msg.twist.twist.linear.x = pDot.x();
+    msg.twist.twist.linear.y = pDot.y();
+    msg.twist.twist.linear.z = pDot.z();
+
+    msg.pose.pose.orientation.x = eta.x();
+    msg.pose.pose.orientation.y = eta.y();
+    msg.pose.pose.orientation.z = eta.z();
+    msg.pose.pose.orientation.w = 0;
+
+    msg.twist.twist.angular.x = etaDot.x();
+    msg.twist.twist.angular.y = etaDot.y();
+    msg.twist.twist.angular.z = etaDot.z();
+
+    odometry_pub.publish(msg);
 }
 
 int main(int argc, char **argv)
@@ -63,15 +66,11 @@ int main(int argc, char **argv)
 
     ros::NodeHandle nh("~");
 
-    double kf = nh.param<double>("kf", 100);
     double Ts = nh.param<double>("Ts", 0.001);
     ros::Rate rate(1/Ts);
 
-    odometry_sub     = nh.subscribe("/odometry", 1, odomCallback);
-    odometry_eta_pub = nh.advertise<quad_control::UavState>("/etaNED", 1);
-    odometry_p_pub   = nh.advertise<quad_control::UavState>("/pNED", 1);
-    pFilter.DifferentiatorInit( kf, Ts );
-    etaFilter.DifferentiatorInit( kf, Ts );
+    odometry_sub    = nh.subscribe("/odometry", 1, odomCallback);
+    odometry_pub    = nh.advertise<nav_msgs::Odometry>("/odometryNED", 1);
     
     while(ros::ok()) {
         ros::spinOnce();

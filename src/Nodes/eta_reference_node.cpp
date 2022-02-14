@@ -2,6 +2,7 @@
 #include "geometry_msgs/Wrench.h"
 #include "quad_control/UavState.h"
 #include "quad_control/DesiredTrajectory.h"
+#include "nav_msgs/Odometry.h"
 #include "../Utils/utility.hpp"
 #include "../Utils/Differentiator.hpp"
 
@@ -17,19 +18,23 @@ ros::Subscriber eta_ref_sub_1, eta_ref_sub_2, eta_ref_sub_3;
 ros::Publisher  eta_ref_pub;
 
 double m, psi_d, v;
-Eigen::Vector3d eta,eta_dot, eta_dot_dot;
+Eigen::Vector3d eta,eta_dot;
 
-void eta_ref_cb_1(const quad_control::UavState::ConstPtr& odom_msg) {
-    tf::vectorMsgToEigen(odom_msg->pose,eta);
-    tf::vectorMsgToEigen(odom_msg->twist,eta_dot);
-    tf::vectorMsgToEigen(odom_msg->wrench,eta_dot_dot);
+void odom_cb(const nav_msgs::Odometry::ConstPtr& odom_msg) {
+    eta << odom_msg->pose.pose.orientation.x,
+        odom_msg->pose.pose.orientation.y,
+        odom_msg->pose.pose.orientation.z;
+    
+    eta_dot << odom_msg->twist.twist.angular.x,
+        odom_msg->twist.twist.angular.y,
+        odom_msg->twist.twist.angular.z;
 }
 
-void eta_ref_cb_2(const quad_control::DesiredTrajectory::ConstPtr& traj_msg) {
+void traj_cb(const quad_control::DesiredTrajectory::ConstPtr& traj_msg) {
     psi_d = traj_msg->position.yaw;
 }
 
-void eta_ref_cb_3(const geometry_msgs::Vector3Stamped::ConstPtr& mu_hat_msg) {
+void mu_hat_cb(const geometry_msgs::Vector3Stamped::ConstPtr& mu_hat_msg) {
     Eigen::Vector3d mu_hat;
     tf::vectorMsgToEigen(mu_hat_msg->vector,mu_hat);
 
@@ -59,16 +64,15 @@ int main(int argc, char **argv)
     m           = nh.param<double>("mass", 0.1);
     eta         = Eigen::Vector3d::Zero();
     eta_dot     = Eigen::Vector3d::Zero();
-    eta_dot_dot = Eigen::Vector3d::Zero();
     psi_d = 0;
     
     double kf = nh.param<double>("kf", 100);
     eta_dot_filter.DifferentiatorInit( kf, Ts );
     eta_dot_dot_filter.DifferentiatorInit( kf, Ts );
 
-    eta_ref_sub_1 = nh.subscribe("/eta_odometry", 1, eta_ref_cb_1);
-    eta_ref_sub_2 = nh.subscribe("/eta_d", 1, eta_ref_cb_2);
-    eta_ref_sub_3 = nh.subscribe("/mu_hat", 1, eta_ref_cb_3);
+    eta_ref_sub_1 = nh.subscribe("/odometry", 1, odom_cb);
+    eta_ref_sub_2 = nh.subscribe("/eta_d", 1, traj_cb);
+    eta_ref_sub_3 = nh.subscribe("/mu_hat", 1, mu_hat_cb);
     eta_ref_pub   = nh.advertise<quad_control::UavState>("/eta_reference", 1);
     ros::Rate rate(1/Ts);
     
