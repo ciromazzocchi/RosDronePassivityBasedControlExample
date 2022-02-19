@@ -13,5 +13,3 @@ geometry_msgs/Twist     error_pose
 geometry_msgs/Twist     error_twist
 
 geometry_msgs/Vector3   mu_hat
-
-geometry_msgs/Wrench    action

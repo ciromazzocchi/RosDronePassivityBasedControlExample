@@ -24,5 +24,5 @@ Matrix3d skew(Vector3d v);
 Matrix3d getR(const Vector3d eta);
 Matrix3d getQ(const Vector3d eta);
 Matrix3d getQdot(const Vector3d eta, const Vector3d eta_d);
-Matrix3d M(const Vector3d eta, const Matrix3d I);
-Matrix3d C(const Vector3d eta, const Vector3d eta_d, const Matrix3d I);
+Matrix3d getM(const Vector3d eta, const Matrix3d I);
+Matrix3d getC(const Vector3d eta, const Vector3d eta_d, const Matrix3d I);

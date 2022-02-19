@@ -19,8 +19,16 @@ void odomCallback(const nav_msgs::Odometry::ConstPtr& odom) {
         odom->pose.pose.orientation.z);
     Eigen::Matrix3d RbNed = q.normalized().toRotationMatrix().transpose();
 
+    Eigen::Vector3d eta = RbNed.eulerAngles(2,1,0);
+    // for(int i=0; i < 3; i++) {
+    //     if(eta(i) >= 0)
+    //         eta(i) = eta(i) - M_PI;
+    //     else
+    //         eta(i) = eta(i) + M_PI;
+    // }
+
     pose    <<  odom->pose.pose.position.x, odom->pose.pose.position.y,
-                odom->pose.pose.position.z, RbNed.eulerAngles(0,1,2);
+                odom->pose.pose.position.z, eta;
 
     twist   <<  RbNed*Eigen::Vector3d( odom->twist.twist.linear.x,
                     odom->twist.twist.linear.y, odom->twist.twist.linear.z),

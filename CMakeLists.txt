@@ -138,5 +138,5 @@ target_link_libraries(outer_loop_node ${Eigen_INCLUDE_DIRS} ${catkin_LIBRARIES})
 add_executable(eta_reference_node src/Nodes/eta_reference_node.cpp)
 target_link_libraries(eta_reference_node Differentiator ${Eigen_INCLUDE_DIRS} ${catkin_LIBRARIES})
 
-#add_executable(inner_loop_node src/Nodes/inner_loop_node.cpp)
-#target_link_libraries(inner_loop_node Utility Differentiator ${Eigen_INCLUDE_DIRS} ${catkin_LIBRARIES})
+add_executable(inner_loop_node src/Nodes/inner_loop_node.cpp)
+target_link_libraries(inner_loop_node Utility Differentiator ${Eigen_INCLUDE_DIRS} ${catkin_LIBRARIES})

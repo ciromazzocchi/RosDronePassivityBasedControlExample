@@ -19,6 +19,9 @@ void odom_cb(const quad_control::UavState::ConstPtr& odom_msg) {
 
     if (odom_msg->pose.linear.z >= -1)
         msg.pose_d.linear.z = odom_msg->pose.linear.z - 0.01;
+    else
+        msg.pose_d.linear.z = -1;
+
     msg.psi_d = 0.0;
 
     Eigen::Vector3d e = Eigen::Vector3d( msg.pose.linear.x - msg.pose_d.linear.x,

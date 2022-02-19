@@ -203,16 +203,16 @@
       <plot mode="TimeSeries" style="Lines">
        <range top="0.100000" left="-0.254000" bottom="-0.100000" right="4.746000"/>
        <limitY/>
-       <curve name="/hummingbird/logger/action/force/z" color="#17becf"/>
+       <curve name="/hummingbird/command/wrenchNED/force/z" color="#0000ff"/>
       </plot>
      </DockArea>
      <DockArea name="tau">
       <plot mode="TimeSeries" style="Lines">
        <range top="0.100000" left="-0.254000" bottom="-0.100000" right="4.746000"/>
        <limitY/>
-       <curve name="/hummingbird/logger/action/torque/x" color="#ff0000"/>
-       <curve name="/hummingbird/logger/action/torque/y" color="#00ff00"/>
-       <curve name="/hummingbird/logger/action/torque/z" color="#0000ff"/>
+       <curve name="/hummingbird/command/wrenchNED/torque/x" color="#ff0000"/>
+       <curve name="/hummingbird/command/wrenchNED/torque/y" color="#00ff00"/>
+       <curve name="/hummingbird/command/wrenchNED/torque/z" color="#0000ff"/>
       </plot>
      </DockArea>
     </DockSplitter>

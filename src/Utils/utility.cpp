@@ -30,9 +30,10 @@ Matrix3d getQ(const Vector3d eta) {
     double theta = eta(1);
 
     Matrix3d Q;
-    Q << 1, 0, -sin(theta),
-         0, cos(phi), cos(theta)*sin(phi),
-         0, -sin(phi), cos(theta)*cos(phi);
+    Q(0,0) = 1; Q(0,1) =          0; Q(0,2) =  -sin(theta);
+    Q(1,0) = 0; Q(1,1) =   cos(phi); Q(1,2) =   cos(theta)*sin(phi),
+    Q(2,0) = 0; Q(2,1) =  -sin(phi); Q(2,2) =   cos(theta)*cos(phi);
+
     return Q;
 };
 
@@ -43,19 +44,19 @@ Matrix3d getQdot(const Vector3d eta, const Vector3d eta_d) {
     double theta_d = eta_d(1);
     
     Matrix3d Q_dot;
-    Q_dot << 0, 0, -cos(theta)*theta_d,
-             0, -sin(phi)*phi_d, -sin(theta)*sin(phi)*theta_d+cos(theta)*cos(phi)*phi_d,
-             0, -cos(phi)*phi_d, -sin(theta)*cos(phi)*theta_d-cos(theta)*sin(phi)*phi_d;
+    Q_dot(0,0) = 0; Q_dot(0,1) =               0; Q_dot(0,2) = -cos(theta)*theta_d;
+    Q_dot(1,0) = 0; Q_dot(1,1) = -sin(phi)*phi_d; Q_dot(1,2) = -sin(theta)*sin(phi)*theta_d+cos(theta)*cos(phi)*phi_d;
+    Q_dot(2,0) = 0; Q_dot(2,1) = -cos(phi)*phi_d; Q_dot(2,2) = -sin(theta)*cos(phi)*theta_d-cos(theta)*sin(phi)*phi_d;
 
     return Q_dot;
 };
 
-Matrix3d M(const Vector3d eta, const Matrix3d I)
+Matrix3d getM(const Vector3d eta, const Matrix3d I)
 {
   return getQ(eta).transpose() * I * getQ(eta);
 }
 
-Matrix3d C(const Vector3d eta, const Vector3d eta_d, const Matrix3d I) {
+Matrix3d getC(const Vector3d eta, const Vector3d eta_d, const Matrix3d I) {
   Eigen::Matrix3d Q = getQ(eta);
   return Q.transpose()*skew(Q*eta_d)*I*Q+Q.transpose()*I*getQdot(eta,eta_d);
 }

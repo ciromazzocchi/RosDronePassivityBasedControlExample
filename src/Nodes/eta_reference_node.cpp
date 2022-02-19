@@ -22,7 +22,7 @@ void mu_hat_cb(const quad_control::UavState::ConstPtr& mu_hat_msg) {
     Eigen::Vector3d mu_hat;
     tf::vectorMsgToEigen(mu_hat_msg->mu_hat,mu_hat);
 
-    mu_hat[2] = mu_hat[2] - 9.81;
+    mu_hat(2) = mu_hat(2) - 9.81;
     
     double psi_d = mu_hat_msg->psi_d;
 
