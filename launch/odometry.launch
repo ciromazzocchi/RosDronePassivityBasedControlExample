@@ -1,9 +1,0 @@
-<?xml version="1.0"?>
-<launch>
-  <node name="odometry_node" type="odometry_node" pkg="quad_control">
-    <remap from="/odometry"     to="/hummingbird/ground_truth/odometryNED"/>
-    <remap from="/odometryNED"  to="/hummingbird/odometryNED"/>
-    <param name="kf" type="double"  value="200"/>
-    <param name="Ts" type="double"  value="0.001"/>
-  </node>
-</launch>
