@@ -133,6 +133,9 @@
         <plot mode="TimeSeries" style="Lines">
          <range top="1.000000" left="0.000000" bottom="0.000000" right="1.000000"/>
          <limitY/>
+         <curve name="/hummingbird/eta_reference/error_pose/angular/x" color="#ff0000"/>
+         <curve name="/hummingbird/eta_reference/error_pose/angular/y" color="#00ff00"/>
+         <curve name="/hummingbird/eta_reference/error_pose/angular/z" color="#0000ff"/>
         </plot>
        </DockArea>
       </DockSplitter>
@@ -150,6 +153,9 @@
         <plot mode="TimeSeries" style="Lines">
          <range top="1.000000" left="0.000000" bottom="0.000000" right="1.000000"/>
          <limitY/>
+         <curve name="/hummingbird/eta_reference/error_twist/angular/x" color="#ff0000"/>
+         <curve name="/hummingbird/eta_reference/error_twist/angular/y" color="#00ff00"/>
+         <curve name="/hummingbird/eta_reference/error_twist/angular/z" color="#0000ff"/>
         </plot>
        </DockArea>
       </DockSplitter>

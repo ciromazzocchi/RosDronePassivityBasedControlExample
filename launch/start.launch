@@ -60,14 +60,16 @@
       <remap  from="/mu_hat"      to="/hummingbird/mu_hat"/>
     </node>
 
-    <!--  
+
     <node name="eta_reference_node" type="eta_reference_node" pkg="quad_control">
-      <param name="mass"  type="double"  value="0.68"/>
-      <param name="kf_d"    type="double"  value="10"/>
-      <param name="kf_dd"    type="double"  value="10"/>
+      <param  name="mass"     type="double"  value="0.68"/>
+      <param  name="kf_d"     type="double"  value="10"/>
+      <param  name="kf_dd"    type="double"  value="10"/>
+      <remap  from="/mu_hat"  to="/hummingbird/mu_hat"/>
+      <remap  from="/eta_ref" to="/hummingbird/eta_reference"/>
     </node>
 
-
+    <!--  
     <node name="inner_loop_node" type="inner_loop_node" pkg="quad_control">
       <param name="mass"  type="double"  value="0.68"/>
       <param name="Ixx"   type="double"  value="0.007"/>
