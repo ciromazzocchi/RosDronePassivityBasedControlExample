@@ -52,13 +52,15 @@
       <remap  from="/trajectory"  to="/hummingbird/trajectory"/>
     </node>
 
-<!--  
     <node name="outer_loop_node" type="outer_loop_node" pkg="quad_control">
-      <param name="mass"  type="double"  value="0.68"/>
-      <param name="Kp"    type="double"  value="10"/>
-      <param name="Kd"    type="double"  value="1"/>
+      <param  name="mass" type="double" value="0.68"/>
+      <param  name="Kp"   type="double" value="10"/>
+      <param  name="Kd"   type="double" value="1"/>
+      <remap  from="/trajectory"  to="/hummingbird/trajectory"/>
+      <remap  from="/mu_hat"      to="/hummingbird/mu_hat"/>
     </node>
 
+    <!--  
     <node name="eta_reference_node" type="eta_reference_node" pkg="quad_control">
       <param name="mass"  type="double"  value="0.68"/>
       <param name="kf_d"    type="double"  value="10"/>
