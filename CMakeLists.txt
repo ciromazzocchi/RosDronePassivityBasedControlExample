@@ -69,7 +69,7 @@ find_package(catkin REQUIRED COMPONENTS
 # Generate messages in the 'msg' folder
 add_message_files(
   FILES
-  UAVPose.msg
+#  UAVPose.msg
   DesiredTrajectory.msg
   UavState.msg
 )
@@ -164,13 +164,13 @@ add_library(Utility  src/Utils/utility.cpp)
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
 add_executable(odometry_node src/Nodes/odometry_node.cpp)
-target_link_libraries(odometry_node Differentiator ${Eigen_INCLUDE_DIRS} ${catkin_LIBRARIES})
+target_link_libraries(odometry_node ${Eigen_INCLUDE_DIRS} ${catkin_LIBRARIES})
 
-add_executable(eta_reference_node src/Nodes/eta_reference_node.cpp)
-target_link_libraries(eta_reference_node Differentiator ${Eigen_INCLUDE_DIRS} ${catkin_LIBRARIES})
+#add_executable(eta_reference_node src/Nodes/eta_reference_node.cpp)
+#target_link_libraries(eta_reference_node Differentiator ${Eigen_INCLUDE_DIRS} ${catkin_LIBRARIES})
 
-add_executable(outer_loop_node src/Nodes/outer_loop_node.cpp)
-target_link_libraries(outer_loop_node ${Eigen_INCLUDE_DIRS} ${catkin_LIBRARIES})
+#add_executable(outer_loop_node src/Nodes/outer_loop_node.cpp)
+#target_link_libraries(outer_loop_node ${Eigen_INCLUDE_DIRS} ${catkin_LIBRARIES})
 
-add_executable(inner_loop_node src/Nodes/inner_loop_node.cpp)
-target_link_libraries(inner_loop_node Utility Differentiator ${Eigen_INCLUDE_DIRS} ${catkin_LIBRARIES})
+#add_executable(inner_loop_node src/Nodes/inner_loop_node.cpp)
+#target_link_libraries(inner_loop_node Utility Differentiator ${Eigen_INCLUDE_DIRS} ${catkin_LIBRARIES})
