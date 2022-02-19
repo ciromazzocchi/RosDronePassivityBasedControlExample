@@ -47,6 +47,11 @@
       <remap  from="/odometry"        to="/hummingbird/odometryNED"/>
     </node>
 
+    <node name="trajectory_node" type="trajectory_node" pkg="quad_control">
+      <remap  from="/odometry"    to="/hummingbird/odometryNED"/>
+      <remap  from="/trajectory"  to="/hummingbird/trajectory"/>
+    </node>
+
 <!--  
     <node name="outer_loop_node" type="outer_loop_node" pkg="quad_control">
       <param name="mass"  type="double"  value="0.68"/>

@@ -10,6 +10,9 @@
         <plot mode="TimeSeries" style="Lines">
          <range top="1.000000" left="0.000000" bottom="0.000000" right="1.000000"/>
          <limitY/>
+         <curve name="/hummingbird/trajectory/pose_d/linear/x" color="#ff0000"/>
+         <curve name="/hummingbird/trajectory/pose_d/linear/y" color="#00ff00"/>
+         <curve name="/hummingbird/trajectory/pose_d/linear/z" color="#0000ff"/>
         </plot>
        </DockArea>
        <DockArea name="desired pose - Angular">
@@ -27,15 +30,18 @@
         <plot mode="TimeSeries" style="Lines">
          <range top="1.000000" left="0.000000" bottom="0.000000" right="1.000000"/>
          <limitY/>
+         <curve name="/hummingbird/trajectory/twist_d/linear/x" color="#ff0000"/>
+         <curve name="/hummingbird/trajectory/twist_d/linear/y" color="#00ff00"/>
+         <curve name="/hummingbird/trajectory/twist_d/linear/z" color="#0000ff"/>
         </plot>
        </DockArea>
        <DockArea name="desired twist - Angular">
         <plot mode="TimeSeries" style="Lines">
          <range top="0.000000" left="0.197000" bottom="-0.000000" right="5.193000"/>
          <limitY/>
-         <curve name="/hummingbird/eta_reference/twist/angular/x" color="#ff0000"/>
-         <curve name="/hummingbird/eta_reference/twist/angular/y" color="#00ff00"/>
-         <curve name="/hummingbird/eta_reference/twist/angular/z" color="#0000ff"/>
+         <curve name="/hummingbird/eta_reference/twist_d/angular/x" color="#ff0000"/>
+         <curve name="/hummingbird/eta_reference/twist_d/angular/y" color="#00ff00"/>
+         <curve name="/hummingbird/eta_reference/twist_d/angular/z" color="#0000ff"/>
         </plot>
        </DockArea>
       </DockSplitter>
@@ -44,6 +50,9 @@
         <plot mode="TimeSeries" style="Lines">
          <range top="1.000000" left="0.000000" bottom="0.000000" right="1.000000"/>
          <limitY/>
+         <curve name="/hummingbird/trajectory/wrench_d/linear/x" color="#ff0000"/>
+         <curve name="/hummingbird/trajectory/wrench_d/linear/y" color="#00ff00"/>
+         <curve name="/hummingbird/trajectory/wrench_d/linear/z" color="#0000ff"/>
         </plot>
        </DockArea>
        <DockArea name="desired wrench - Angular">
@@ -115,9 +124,9 @@
         <plot mode="TimeSeries" style="Lines">
          <range top="0.963500" left="-0.254000" bottom="-0.023500" right="4.746000"/>
          <limitY/>
-         <curve name="/hummingbird/mu_hat/error_pose/linear/x" color="#ff0000"/>
-         <curve name="/hummingbird/mu_hat/error_pose/linear/y" color="#00ff00"/>
-         <curve name="/hummingbird/mu_hat/error_pose/linear/z" color="#0000ff"/>
+         <curve name="/hummingbird/trajectory/error_pose/linear/x" color="#ff0000"/>
+         <curve name="/hummingbird/trajectory/error_pose/linear/y" color="#00ff00"/>
+         <curve name="/hummingbird/trajectory/error_pose/linear/z" color="#0000ff"/>
         </plot>
        </DockArea>
        <DockArea name="Pose - Angular">
@@ -132,9 +141,9 @@
         <plot mode="TimeSeries" style="Lines">
          <range top="0.000000" left="-0.254000" bottom="-0.000000" right="4.746000"/>
          <limitY/>
-         <curve name="/hummingbird/mu_hat/error_twist/linear/x" color="#ff0000"/>
-         <curve name="/hummingbird/mu_hat/error_twist/linear/y" color="#00ff00"/>
-         <curve name="/hummingbird/mu_hat/error_twist/linear/z" color="#0000ff"/>
+         <curve name="/hummingbird/trajectory/error_twist/linear/x" color="#ff0000"/>
+         <curve name="/hummingbird/trajectory/error_twist/linear/y" color="#00ff00"/>
+         <curve name="/hummingbird/trajectory/error_twist/linear/z" color="#0000ff"/>
         </plot>
        </DockArea>
        <DockArea name="Twist - Angular">

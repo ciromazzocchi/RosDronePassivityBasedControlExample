@@ -166,6 +166,9 @@ add_library(Utility  src/Utils/utility.cpp)
 add_executable(odometry_node src/Nodes/odometry_node.cpp)
 target_link_libraries(odometry_node ${Eigen_INCLUDE_DIRS} ${catkin_LIBRARIES})
 
+add_executable(trajectory_node src/Nodes/trajectory_node.cpp)
+target_link_libraries(trajectory_node ${Eigen_INCLUDE_DIRS} ${catkin_LIBRARIES})
+
 #add_executable(eta_reference_node src/Nodes/eta_reference_node.cpp)
 #target_link_libraries(eta_reference_node Differentiator ${Eigen_INCLUDE_DIRS} ${catkin_LIBRARIES})
 
