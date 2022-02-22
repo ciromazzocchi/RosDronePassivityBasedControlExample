@@ -8,19 +8,31 @@ Matrix3d skew(Vector3d v)
     return s;
 }
 
+
+Vector3d getEta(Eigen::Quaterniond q)
+{
+  double q0, q1, q2, q3;
+  Eigen::Vector3d eta;
+  q0 = q.w(); q1 = q.x(); q2 = q.y(); q3 = q.z();
+  eta(0) = atan( (q2*q3 + q0*q1) / (pow(q0,2) + pow(q3,2) - 0.5) );
+  eta(1) = asin( 2 * (q0*q2 - q1*q3));
+  eta(2) = atan( (q1*q2 + q0*q3) / (pow(q0,2) + pow(q1,2) - 0.5) );
+  return eta;
+}
+
 Matrix3d getR(const Vector3d eta)
 {
   Matrix3d R;
   double phi = eta[0]; double th = eta[1]; double psi = eta[2];
-  R << cos(th)*cos(psi),
-      sin(phi)*sin(th)*cos(psi)-cos(phi)*sin(psi),
-      cos(phi)*sin(th)*cos(psi)+sin(phi)*sin(psi),
-      cos(th)*sin(psi),
-      sin(phi)*sin(th)*sin(psi)+cos(phi)*cos(psi),
-      cos(phi)*sin(th)*sin(psi)-sin(phi)*cos(psi),
-      -sin(th),
-      sin(phi)*cos(th),
-      cos(phi)*cos(th);
+  R(0,0) = cos(th)*cos(psi);
+  R(0,1) = sin(phi)*sin(th)*cos(psi)-cos(phi)*sin(psi);
+  R(0,2) = cos(phi)*sin(th)*cos(psi)+sin(phi)*sin(psi);
+  R(1,0) = cos(th)*sin(psi);
+  R(1,1) = sin(phi)*sin(th)*sin(psi)+cos(phi)*cos(psi);
+  R(1,2) = cos(phi)*sin(th)*sin(psi)-sin(phi)*cos(psi);
+  R(2,0) = -sin(th);
+  R(2,1) = sin(phi)*cos(th);
+  R(2,2) = cos(phi)*cos(th);
 
   return R;
 }

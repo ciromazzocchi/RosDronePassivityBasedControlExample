@@ -3,15 +3,8 @@
 #include <cmath>
 #include <Eigen/Dense>
 
-#include <geometry_msgs/Twist.h>
-
-using Vector2d = Eigen::Matrix<double,2,1>;
 using Vector3d = Eigen::Matrix<double,3,1>;
-using Vector4d = Eigen::Matrix<double,4,1>;
-using Vector6d = Eigen::Matrix<double,6,1>;
 using Matrix3d = Eigen::Matrix<double,3,3>;
-using Matrix4d = Eigen::Matrix<double,4,4>;
-using Matrix6d = Eigen::Matrix<double,6,6>;
     
 /**
  * @brief Return the skew symmetrix matrix
@@ -20,7 +13,7 @@ using Matrix6d = Eigen::Matrix<double,6,6>;
  * @return Eigen::Matrix3d 
  */
 Matrix3d skew(Vector3d v);
-
+Vector3d getEta(Eigen::Quaterniond q);
 Matrix3d getR(const Vector3d eta);
 Matrix3d getQ(const Vector3d eta);
 Matrix3d getQdot(const Vector3d eta, const Vector3d eta_d);

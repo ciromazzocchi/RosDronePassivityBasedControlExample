@@ -45,7 +45,7 @@ void odom_cb(const quad_control::UavState::ConstPtr& odom_msg) {
     Eigen::Vector3d tau_est = Eigen::Vector3d::Zero();
     
     Eigen::Matrix<double,6,1> wrench;
-    wrench << Eigen::Vector3d(0,0,uT), 
+    wrench << Eigen::Vector3d(0,0,uT),
             Qt_inv * (M*etaDotDot_r + C*etaDot_r - tau_est - Kd*v_eta - Kp*e);
     geometry_msgs::Wrench msg;
     tf::wrenchEigenToMsg(wrench, msg);

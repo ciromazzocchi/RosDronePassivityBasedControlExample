@@ -46,7 +46,7 @@
       launch-prefix="bash -c 'sleep 1; $0 $@' ">
       <remap  from="/gazebo_odometry" to="/hummingbird/ground_truth/odometryNED"/>
       <remap  from="/odometry"        to="/hummingbird/odometryNED"/>
-    </node>
+    </node> 
 
     <node name="trajectory_node" type="trajectory_node" pkg="quad_control"
       launch-prefix="bash -c 'sleep 1; $0 $@' ">
@@ -63,7 +63,6 @@
       <remap  from="/mu_hat"      to="/hummingbird/mu_hat"/>
     </node>
 
-
     <node name="eta_reference_node" type="eta_reference_node" pkg="quad_control"
       launch-prefix="bash -c 'sleep 1; $0 $@' ">
       <param  name="mass"     type="double"  value="0.68"/>
@@ -72,7 +71,7 @@
       <remap  from="/mu_hat"  to="/hummingbird/mu_hat"/>
       <remap  from="/eta_ref" to="/hummingbird/eta_reference"/>
     </node>
-
+   
     <node name="inner_loop_node" type="inner_loop_node" pkg="quad_control"
       launch-prefix="bash -c 'sleep 1; $0 $@' ">
       <param name="mass"  type="double"  value="0.68"/>
@@ -80,14 +79,14 @@
       <param name="Iyy"   type="double"  value="0.007"/>
       <param name="Izz"   type="double"  value="0.012"/>
       <param name="v"     type="double"  value="100"/>
-      <param name="Kp"    type="double"  value="625"/>
-      <param name="Kd"    type="double"  value="50"/>
+      <param name="Kp"    type="double"  value="100"/>
+      <param name="Kd"    type="double"  value="1"/>
       <remap  from="/eta_ref" to="/hummingbird/eta_reference"/>
       <remap  from="/command" to="/hummingbird/command/wrenchNED"/>
     </node>
-
-    <!--  
-      <node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)"  />
+    
+ <!-- 
+     <node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)"  />
     -->
   </group>
 </launch>
