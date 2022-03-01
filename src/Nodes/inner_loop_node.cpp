@@ -57,7 +57,6 @@ int main(int argc, char **argv)
     ros::init(argc, argv, "inner_loop_node");
 
     ros::NodeHandle nh("~");
-    ros::Rate rate(1000);
 
     Kp  = nh.param<double>("Kp", 1) * Eigen::Matrix3d::Identity();
     Kd  = nh.param<double>("Kd", 1) * Eigen::Matrix3d::Identity();
@@ -68,15 +67,10 @@ int main(int argc, char **argv)
 
     v = nh.param<double>("v", 1);
 
-    il_sub  = nh.subscribe("/eta_ref", 1, odom_cb);
-    il_pub  = nh.advertise<geometry_msgs::Wrench>("/command", 1);
+    il_sub  = nh.subscribe("/sub_topic", 1, odom_cb);
+    il_pub  = nh.advertise<geometry_msgs::Wrench>("/pub_topic", 1);
     
-    ros::Duration(1).sleep();
-
-    while(ros::ok()) {
-        ros::spinOnce();
-        rate.sleep();
-    }
+    ros::spin();
 
     return 0;
 }

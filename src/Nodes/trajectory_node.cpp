@@ -43,17 +43,10 @@ int main(int argc, char **argv)
     ros::init(argc, argv, "trajectory_node");
     ros::NodeHandle nh("~");
 
-    ros::Rate rate(1000);
-
-    traj_sub = nh.subscribe("/odometry", 1, odom_cb);
-    traj_pub = nh.advertise<quad_control::UavState>("/trajectory", 1);
+    traj_sub = nh.subscribe("/sub_topic", 1, odom_cb);
+    traj_pub = nh.advertise<quad_control::UavState>("/pub_topic", 1);
     
-    ros::Duration(0.01).sleep();
-
-    while(ros::ok()) {
-        ros::spinOnce();
-        rate.sleep();
-    }
+    ros::spin();
 
     return 0;
 }

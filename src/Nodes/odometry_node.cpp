@@ -24,24 +24,18 @@ void odomCallback(const nav_msgs::Odometry::ConstPtr& odom) {
     
     //Eigen::Matrix3d RbNed = q.normalized().toRotationMatrix().inverse();
 
+    Eigen::Matrix3d RbNed = q.normalized().toRotationMatrix();
+    
+    //Eigen::Vector3d eta = RbNed.eulerAngles(2,1,0);
     Eigen::Vector3d eta = getEta(q);
-
-    Eigen::Matrix3d RbNed = getR(eta).inverse();
-    // Eigen::Vector3d eta = RbNed.eulerAngles(2,1,0);
-    // for(int i=0; i < 3; i++) {
-    //     if(eta(i) >= 0)
-    //         eta(i) = eta(i) - M_PI;
-    //     else
-    //         eta(i) = eta(i) + M_PI;
-    // }
-
+    
     pose    <<  odom->pose.pose.position.x, odom->pose.pose.position.y,
                 odom->pose.pose.position.z, eta;
 
     //twist = twistDifferentiator.getDifferentiatoredValue(pose);
-   twist   <<  getR(eta)*Eigen::Vector3d( odom->twist.twist.linear.x,
+    twist   <<  RbNed*Eigen::Vector3d( odom->twist.twist.linear.x,
                     odom->twist.twist.linear.y, odom->twist.twist.linear.z),
-                getR(eta)*Eigen::Vector3d ( odom->twist.twist.angular.x,
+                getQ(eta).inverse()*Eigen::Vector3d ( odom->twist.twist.angular.x,
                     odom->twist.twist.angular.y, odom->twist.twist.angular.z);
     
     quad_control::UavState msg;
@@ -57,16 +51,17 @@ int main(int argc, char **argv)
 
     ros::NodeHandle nh("~");
 
-    ros::Rate rate(1000);
+    twistDifferentiator.DifferentiatorInit(100,0.01);
 
-    twistDifferentiator.DifferentiatorInit(100,0.001);
-
-    odometry_sub    = nh.subscribe("/gazebo_odometry", 1, odomCallback);
-    odometry_pub    = nh.advertise<quad_control::UavState>("/odometry", 1);
+    odometry_sub    = nh.subscribe("/sub_topic", 1, odomCallback);
+    odometry_pub    = nh.advertise<quad_control::UavState>("/pub_topic", 1);
     
+    ros::Rate rate(100);
     while(ros::ok()) {
         ros::spinOnce();
         rate.sleep();
     }
+
+
     return 0;
 }

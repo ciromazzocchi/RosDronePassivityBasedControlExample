@@ -39,21 +39,14 @@ int main(int argc, char **argv)
     ros::init(argc, argv, "outer_loop_node");
     ros::NodeHandle nh("~");
 
-    ros::Rate rate(1000);
-
     Kp  = nh.param<double>("Kp", 1) * Eigen::Matrix3d::Identity();
     Kd  = nh.param<double>("Kd", 1) * Eigen::Matrix3d::Identity();
     m   = nh.param<double>("mass", 0.1);
 
-    ol_sub = nh.subscribe("/trajectory", 1, odom_cb);
-    ol_pub = nh.advertise<quad_control::UavState>("/mu_hat", 1);
+    ol_sub = nh.subscribe("/sub_topic", 1, odom_cb);
+    ol_pub = nh.advertise<quad_control::UavState>("/pub_topic", 1);
     
-    ros::Duration(0.01).sleep();
-
-    while(ros::ok()) {
-        ros::spinOnce();
-        rate.sleep();
-    }
+    ros::spin();
 
     return 0;
 }

@@ -63,19 +63,13 @@ int main(int argc, char **argv)
     
     double kf_d = nh.param<double>("kf_d", 100);
     double kf_dd = nh.param<double>("kf_dd", 100);
-    eta_dot_filter.DifferentiatorInit( kf_d, 0.001 );
-    etaDot_dot_filter.DifferentiatorInit( kf_dd, 0.001 );
+    eta_dot_filter.DifferentiatorInit( kf_d, 0.01 );
+    etaDot_dot_filter.DifferentiatorInit( kf_dd, 0.01 );
 
-    eta_ref_sub = nh.subscribe("/mu_hat", 1, mu_hat_cb);
-    eta_ref_pub   = nh.advertise<quad_control::UavState>("/eta_ref", 1);
-    ros::Rate rate(1000);
+    eta_ref_sub = nh.subscribe("/sub_topic", 1, mu_hat_cb);
+    eta_ref_pub   = nh.advertise<quad_control::UavState>("/pub_topic", 1);
     
-    ros::Duration(0.02).sleep();
-
-    while(ros::ok()) {
-        ros::spinOnce();
-        rate.sleep();
-    }
+    ros::spin();
 
     return 0;
 }

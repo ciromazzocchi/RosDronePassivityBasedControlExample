@@ -34,50 +34,43 @@
   
     <include file="$(find quad_control)/launch/plot_juggler.launch"/>
 
-
-    <node name="odometry_node" type="odometry_node" pkg="quad_control" 
-      launch-prefix="bash -c 'sleep 1; $0 $@' ">
-      <remap  from="/gazebo_odometry" to="/hummingbird/ground_truth/odometryNED"/>
-      <remap  from="/odometry"        to="/hummingbird/odometryNED"/>
+    <node name="odometry_node" type="odometry_node" pkg="quad_control">
+      <remap  from="/sub_topic" to="/hummingbird/ground_truth/odometryNED"/>
+      <remap  from="/pub_topic" to="/hummingbird/odometryNED"/>
     </node> 
 
-    <node name="trajectory_node" type="trajectory_node" pkg="quad_control"
-      launch-prefix="bash -c 'sleep 1; $0 $@' ">
-      <remap  from="/odometry"    to="/hummingbird/odometryNED"/>
-      <remap  from="/trajectory"  to="/hummingbird/trajectory"/>
+    <node name="trajectory_node" type="trajectory_node" pkg="quad_control">
+      <remap  from="/sub_topic" to="/hummingbird/odometryNED"/>
+      <remap  from="/pub_topic" to="/hummingbird/trajectory"/>
     </node>
 
-    <node name="outer_loop_node" type="outer_loop_node" pkg="quad_control"
-      launch-prefix="bash -c 'sleep 1; $0 $@' ">
+    <node name="outer_loop_node" type="outer_loop_node" pkg="quad_control">
       <param  name="mass" type="double" value="0.68"/>
-      <param  name="Kp"   type="double" value="50"/>
-      <param  name="Kd"   type="double" value="1"/>
-      <remap  from="/trajectory"  to="/hummingbird/trajectory"/>
-      <remap  from="/mu_hat"      to="/hummingbird/mu_hat"/>
+      <param  name="Kp"   type="double" value="100"/>
+      <param  name="Kd"   type="double" value="10"/>
+      <remap  from="/sub_topic" to="/hummingbird/trajectory"/>
+      <remap  from="/pub_topic" to="/hummingbird/mu_hat"/>
     </node>
 
-    <node name="eta_reference_node" type="eta_reference_node" pkg="quad_control"
-      launch-prefix="bash -c 'sleep 1; $0 $@' ">
+    <node name="eta_reference_node" type="eta_reference_node" pkg="quad_control">
       <param  name="mass"     type="double"  value="0.68"/>
-      <param  name="kf_d"     type="double"  value="100"/>
-      <param  name="kf_dd"    type="double"  value="100"/>
-      <remap  from="/mu_hat"  to="/hummingbird/mu_hat"/>
-      <remap  from="/eta_ref" to="/hummingbird/eta_reference"/>
+      <param  name="kf_d"     type="double"  value="10"/>
+      <param  name="kf_dd"    type="double"  value="10"/>
+      <remap  from="/sub_topic" to="/hummingbird/mu_hat"/>
+      <remap  from="/pub_topic" to="/hummingbird/eta_reference"/>
     </node>
-   
-    <node name="inner_loop_node" type="inner_loop_node" pkg="quad_control"
-      launch-prefix="bash -c 'sleep 1; $0 $@' ">
+
+    <node name="inner_loop_node" type="inner_loop_node" pkg="quad_control">
       <param name="mass"  type="double"  value="0.68"/>
       <param name="Ixx"   type="double"  value="0.007"/>
       <param name="Iyy"   type="double"  value="0.007"/>
       <param name="Izz"   type="double"  value="0.012"/>
-      <param name="v"     type="double"  value="100"/>
-      <param name="Kp"    type="double"  value="200"/>
-      <param name="Kd"    type="double"  value="1"/>
-      <remap  from="/eta_ref" to="/hummingbird/eta_reference"/>
-      <remap  from="/command" to="/hummingbird/command/wrenchNED"/>
+      <param name="v"     type="double"  value="10"/>
+      <param name="Kp"    type="double"  value="1"/>
+      <param name="Kd"    type="double"  value="0.5"/>
+      <remap  from="/sub_topic" to="/hummingbird/eta_reference"/>
+      <remap  from="/pub_topic" to="/hummingbird/command/wrenchNED"/>
     </node>
-
 <!--  
     <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
     <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" />
