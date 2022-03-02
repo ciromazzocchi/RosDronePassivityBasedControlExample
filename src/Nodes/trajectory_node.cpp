@@ -1,5 +1,7 @@
 #include "ros/ros.h"
+#include "nav_msgs/Odometry.h"
 #include "quad_control/UavState.h"
+#include "../Utils/utility.hpp"
 
 #include <Eigen/Dense>
 #include <tf/LinearMath/Matrix3x3.h>
@@ -9,16 +11,38 @@
 ros::Subscriber traj_sub;
 ros::Publisher  traj_pub;
 
-void odom_cb(const quad_control::UavState::ConstPtr& odom_msg) {
+void odom_cb(const nav_msgs::Odometry::ConstPtr& odom_msg) {
     quad_control::UavState msg;
-    msg = *odom_msg;
+    msg.header = odom_msg->header;
+
+    Eigen::Quaterniond q = Eigen::Quaterniond( odom_msg->pose.pose.orientation.w,
+        odom_msg->pose.pose.orientation.x, odom_msg->pose.pose.orientation.y,
+        odom_msg->pose.pose.orientation.z);
+    Eigen::Vector3d eta = getEta(q);
+
+    tf::vectorEigenToMsg(Eigen::Vector3d::Zero(),msg.mu_hat);
+    tf::twistEigenToMsg(Eigen::Matrix<double,6,1>::Zero(),msg.error_pose);
+    tf::twistEigenToMsg(Eigen::Matrix<double,6,1>::Zero(),msg.error_twist);
 
     tf::vectorEigenToMsg(Eigen::Vector3d::Zero(),msg.pose_d.linear);
     tf::vectorEigenToMsg(Eigen::Vector3d::Zero(),msg.twist_d.linear);
     tf::vectorEigenToMsg(Eigen::Vector3d::Zero(),msg.wrench_d.linear);
 
-    if (odom_msg->pose.linear.z >= -1)
-        msg.pose_d.linear.z = odom_msg->pose.linear.z - 0.01;
+    msg.pose.linear.x = odom_msg->pose.pose.position.x;
+    msg.pose.linear.y = odom_msg->pose.pose.position.y;
+    msg.pose.linear.z = odom_msg->pose.pose.position.z;
+
+    tf::vectorEigenToMsg(eta,msg.pose.angular);
+
+    msg.twist.linear.x = odom_msg->twist.twist.linear.x;
+    msg.twist.linear.y = odom_msg->twist.twist.linear.y;
+    msg.twist.linear.z = odom_msg->twist.twist.linear.z;
+    msg.twist.angular.x = odom_msg->twist.twist.angular.x;
+    msg.twist.angular.y = odom_msg->twist.twist.angular.y;
+    msg.twist.angular.z = odom_msg->twist.twist.angular.z;
+
+    if (odom_msg->pose.pose.position.z >= -1)
+        msg.pose_d.linear.z = odom_msg->pose.pose.position.z - 0.01;
     else
         msg.pose_d.linear.z = -1;
 

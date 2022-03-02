@@ -77,18 +77,18 @@
        <plot mode="TimeSeries" style="Lines">
         <range top="0.001500" left="-0.254000" bottom="-0.061500" right="4.746000"/>
         <limitY/>
-        <curve name="/hummingbird/odometryNED/pose/linear/x" color="#ff0000"/>
-        <curve name="/hummingbird/odometryNED/pose/linear/y" color="#00ff00"/>
-        <curve name="/hummingbird/odometryNED/pose/linear/z" color="#0000ff"/>
+        <curve name="/hummingbird/odometryNED/pose/pose/position/x" color="#ff0000"/>
+        <curve name="/hummingbird/odometryNED/pose/pose/position/y" color="#00ff00"/>
+        <curve name="/hummingbird/odometryNED/pose/pose/position/z" color="#0000ff"/>
        </plot>
       </DockArea>
       <DockArea name="Twist - Linear">
        <plot mode="TimeSeries" style="Lines">
         <range top="0.000000" left="-0.254000" bottom="-0.000000" right="4.746000"/>
         <limitY/>
-        <curve name="/hummingbird/odometryNED/twist/linear/x" color="#ff0000"/>
-        <curve name="/hummingbird/odometryNED/twist/linear/y" color="#00ff00"/>
-        <curve name="/hummingbird/odometryNED/twist/linear/z" color="#0000ff"/>
+        <curve name="/hummingbird/odometryNED/twist/twist/linear/x" color="#ff0000"/>
+        <curve name="/hummingbird/odometryNED/twist/twist/linear/y" color="#00ff00"/>
+        <curve name="/hummingbird/odometryNED/twist/twist/linear/z" color="#0000ff"/>
        </plot>
       </DockArea>
      </DockSplitter>
@@ -97,18 +97,18 @@
        <plot mode="TimeSeries" style="Lines">
         <range top="0.000000" left="-0.254000" bottom="-0.000000" right="4.746000"/>
         <limitY/>
-        <curve name="/hummingbird/odometryNED/pose/angular/x" color="#ff0000"/>
-        <curve name="/hummingbird/odometryNED/pose/angular/y" color="#00ff00"/>
-        <curve name="/hummingbird/odometryNED/pose/angular/z" color="#0000ff"/>
+        <curve name="/hummingbird/odometryNED/pose/pose/orientation/roll_deg" color="#ff0000"/>
+        <curve name="/hummingbird/odometryNED/pose/pose/orientation/pitch_deg" color="#00ff00"/>
+        <curve name="/hummingbird/odometryNED/pose/pose/orientation/yaw_deg" color="#0000ff"/>
        </plot>
       </DockArea>
       <DockArea name="Twist - Angular">
        <plot mode="TimeSeries" style="Lines">
         <range top="0.000000" left="-0.254000" bottom="-0.000000" right="4.746000"/>
         <limitY/>
-        <curve name="/hummingbird/odometryNED/twist/angular/x" color="#ff0000"/>
-        <curve name="/hummingbird/odometryNED/twist/angular/y" color="#00ff00"/>
-        <curve name="/hummingbird/odometryNED/twist/angular/z" color="#0000ff"/>
+        <curve name="/hummingbird/odometryNED/twist/twist/angular/x" color="#ff0000"/>
+        <curve name="/hummingbird/odometryNED/twist/twist/angular/y" color="#00ff00"/>
+        <curve name="/hummingbird/odometryNED/twist/twist/angular/z" color="#0000ff"/>
        </plot>
       </DockArea>
      </DockSplitter>

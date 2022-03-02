@@ -130,7 +130,7 @@ add_executable(odometry_node src/Nodes/odometry_node.cpp)
 target_link_libraries(odometry_node Utility ${Eigen_INCLUDE_DIRS} ${catkin_LIBRARIES})
 
 add_executable(trajectory_node src/Nodes/trajectory_node.cpp)
-target_link_libraries(trajectory_node ${Eigen_INCLUDE_DIRS} ${catkin_LIBRARIES})
+target_link_libraries(trajectory_node Utility ${Eigen_INCLUDE_DIRS} ${catkin_LIBRARIES})
 
 add_executable(outer_loop_node src/Nodes/outer_loop_node.cpp)
 target_link_libraries(outer_loop_node ${Eigen_INCLUDE_DIRS} ${catkin_LIBRARIES})
