@@ -1,55 +1,65 @@
 #include "ros/ros.h"
 
-#include "../Utils/utility.hpp"
-#include "quad_control/UavState.h"
-
 #include <tf_conversions/tf_eigen.h>
 #include <eigen_conversions/eigen_msg.h>
 
-ros::Subscriber il_sub;
-ros::Publisher  il_pub;
+#include "../Utils/utility.hpp"
+
+#include "quad_control/DesiredAttritude.h"
+#include "nav_msgs/Odometry.h"
+
+ros::Subscriber il_sub, il_odom_sub, il_mu_sub;
+ros::Publisher  il_cmd_pub;
 
 double m, v;
-Eigen::Matrix3d Kp, Kd, I;
+Eigen::Matrix3d Kp, Kd, I, M, C, Qt_inv;
+Eigen::Vector3d eta,eta_dot, mu_hat;
 
-void odom_cb(const quad_control::UavState::ConstPtr& odom_msg) {
-    
-    Eigen::Vector3d mu_hat;
-    tf::vectorMsgToEigen(odom_msg->mu_hat,mu_hat);
+void mu_sub_cb(const geometry_msgs::Vector3::ConstPtr& msg) {
+    mu_hat << msg->x, msg->y, msg->z;
+
     mu_hat(2)= mu_hat(2) - 9.81;
+}
 
+void odom_sub_cb(const nav_msgs::Odometry::ConstPtr& msg) {
+    eta = getEta(Eigen::Quaterniond(    msg->pose.pose.orientation.w,
+            msg->pose.pose.orientation.x, msg->pose.pose.orientation.y,
+            msg->pose.pose.orientation.z));
+    tf::vectorMsgToEigen(msg->twist.twist.angular, eta_dot);
+
+    Qt_inv = getQ(eta).transpose().inverse();
+    M = getM(eta,I);
+    C = getC(eta,eta_dot, I);
+}
+
+void cb(const quad_control::DesiredAttritude::ConstPtr& odom_msg) {
     double uT = m*sqrt( mu_hat.transpose() * mu_hat);
 
-    Eigen::Vector3d eta, etaDot;
+    Eigen::Vector3d eta_d,eta_dot_d, eta_dot_dot_d;
 
-    tf::vectorMsgToEigen(odom_msg->pose.angular,eta);
-    tf::vectorMsgToEigen(odom_msg->twist.angular,etaDot);
+    tf::vectorMsgToEigen(odom_msg->eta,eta_d);
+    tf::vectorMsgToEigen(odom_msg->eta_dot,eta_dot_d);
+    tf::vectorMsgToEigen(odom_msg->eta_dot_dot,eta_dot_dot_d);
 
-    Eigen::Matrix3d Q = getQ(eta);
-    Eigen::Matrix3d Qt = Q.transpose();
-    Eigen::Matrix3d Qt_inv = Qt.inverse();
+    eta_d           = eta_d         * M_PI/180;
+    eta_dot_d       = eta_dot_d     * M_PI/180;
+    eta_dot_dot_d   = eta_dot_dot_d * M_PI/180;
 
-    Eigen::Matrix3d M = getM(eta,I);
-    Eigen::Matrix3d C = getC(eta,etaDot, I);
+    Eigen::Vector3d e       = eta       - eta_d;
+    Eigen::Vector3d e_dot   = eta_dot   - eta_dot_d;
 
-    Eigen::Vector3d e, eDot, etaDot_d, etaDotDot_d;
-    tf::vectorMsgToEigen(odom_msg->error_pose.angular,  e           );
-    tf::vectorMsgToEigen(odom_msg->error_twist.angular, eDot        );
-    tf::vectorMsgToEigen(odom_msg->twist_d.angular,     etaDot_d    );
-    tf::vectorMsgToEigen(odom_msg->wrench_d.angular,    etaDotDot_d );
-    
-    Eigen::Vector3d etaDot_r    = etaDot_d    - v*e;
-    Eigen::Vector3d etaDotDot_r = etaDotDot_d - v*eDot;
-    Eigen::Vector3d v_eta       = eDot        + v*e;
+    Eigen::Vector3d eta_dot_r       = eta_dot_d     - v*e;
+    Eigen::Vector3d eta_dot_dot_r   = eta_dot_dot_d - v*e_dot;
+    Eigen::Vector3d v_eta           = e_dot         + v*e;
 
     Eigen::Vector3d tau_est = Eigen::Vector3d::Zero();
     
     Eigen::Matrix<double,6,1> wrench;
     wrench << Eigen::Vector3d(0,0,uT),
-            Qt_inv * (M*etaDotDot_r + C*etaDot_r - tau_est - Kd*v_eta - Kp*e);
+            Qt_inv * (M*eta_dot_dot_r + C*eta_dot_r - tau_est - Kd*v_eta - Kp*e);
     geometry_msgs::Wrench msg;
     tf::wrenchEigenToMsg(wrench, msg);
-    il_pub.publish(msg);
+    il_cmd_pub.publish(msg);
 }
 
 int main(int argc, char **argv)
@@ -67,8 +77,14 @@ int main(int argc, char **argv)
 
     v = nh.param<double>("v", 1);
 
-    il_sub  = nh.subscribe("/sub_topic", 1, odom_cb);
-    il_pub  = nh.advertise<geometry_msgs::Wrench>("/pub_topic", 1);
+    eta = eta_dot = mu_hat = Eigen::Vector3d::Zero();
+
+    M = C = Qt_inv = Eigen::Matrix3d::Zero();
+
+    il_sub      = nh.subscribe("/eta_ref_topic", 1, cb);
+    il_odom_sub = nh.subscribe("/odom_topic", 1, odom_sub_cb);
+    il_mu_sub   = nh.subscribe("/mu_topic", 1, mu_sub_cb);
+    il_cmd_pub  = nh.advertise<geometry_msgs::Wrench>("/pub_topic", 1);
     
     ros::spin();
 

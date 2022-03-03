@@ -48,16 +48,18 @@
       <param  name="mass" type="double" value="0.68"/>
       <param  name="Kp"   type="double" value="100"/>
       <param  name="Kd"   type="double" value="10"/>
-      <remap  from="/sub_topic" to="/hummingbird/trajectory"/>
-      <remap  from="/pub_topic" to="/hummingbird/mu_hat"/>
+      <remap  from="/traj_topic" to="/hummingbird/trajectory"/>
+      <remap  from="/odom_topic" to="/hummingbird/odometryNED"/>
+      <remap  from="/mu_hat"     to="/hummingbird/mu_hat"/>
     </node>
 
     <node name="eta_reference_node" type="eta_reference_node" pkg="quad_control">
       <param  name="mass"     type="double"  value="0.68"/>
       <param  name="kf_d"     type="double"  value="10"/>
       <param  name="kf_dd"    type="double"  value="10"/>
-      <remap  from="/sub_topic" to="/hummingbird/mu_hat"/>
-      <remap  from="/pub_topic" to="/hummingbird/eta_reference"/>
+      <remap  from="/sub_topic"     to="/hummingbird/mu_hat"/>
+      <remap  from="/traj_topic"    to="/hummingbird/trajectory"/>
+      <remap  from="/eta_ref_topic" to="/hummingbird/eta_reference"/>
     </node>
 
     <node name="inner_loop_node" type="inner_loop_node" pkg="quad_control">
@@ -68,8 +70,10 @@
       <param name="v"     type="double"  value="10"/>
       <param name="Kp"    type="double"  value="1"/>
       <param name="Kd"    type="double"  value="0.5"/>
-      <remap  from="/sub_topic" to="/hummingbird/eta_reference"/>
-      <remap  from="/pub_topic" to="/hummingbird/command/wrenchNED"/>
+      <remap  from="/eta_ref_topic" to="/hummingbird/eta_reference"/>
+      <remap  from="/odom_topic"    to="/hummingbird/odometryNED"/>
+      <remap  from="/mu_topic"      to="/hummingbird/mu_hat" />
+      <remap  from="/pub_topic"     to="/hummingbird/command/wrenchNED"/>
     </node>
 <!--  
     <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
