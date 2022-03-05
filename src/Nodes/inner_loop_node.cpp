@@ -5,8 +5,7 @@
 
 #include "../Utils/utility.hpp"
 
-#include "quad_control/DesiredAttritude.h"
-#include "nav_msgs/Odometry.h"
+#include "quad_control/State.h"
 
 ros::Subscriber il_sub, il_odom_sub, il_mu_sub;
 ros::Publisher  il_cmd_pub;
@@ -21,29 +20,23 @@ void mu_sub_cb(const geometry_msgs::Vector3::ConstPtr& msg) {
     mu_hat(2)= mu_hat(2) - 9.81;
 }
 
-void odom_sub_cb(const nav_msgs::Odometry::ConstPtr& msg) {
-    eta = getEta(Eigen::Quaterniond(    msg->pose.pose.orientation.w,
-            msg->pose.pose.orientation.x, msg->pose.pose.orientation.y,
-            msg->pose.pose.orientation.z));
-    tf::vectorMsgToEigen(msg->twist.twist.angular, eta_dot);
+void odom_sub_cb(const quad_control::State::ConstPtr& msg) {
+    tf::vectorMsgToEigen(msg->position, eta);
+    tf::vectorMsgToEigen(msg->speed, eta_dot);
 
     Qt_inv = getQ(eta).transpose().inverse();
     M = getM(eta,I);
     C = getC(eta,eta_dot, I);
 }
 
-void cb(const quad_control::DesiredAttritude::ConstPtr& odom_msg) {
+void cb(const quad_control::State::ConstPtr& traj_msg) {
     double uT = m*sqrt( mu_hat.transpose() * mu_hat);
 
     Eigen::Vector3d eta_d,eta_dot_d, eta_dot_dot_d;
 
-    tf::vectorMsgToEigen(odom_msg->eta,eta_d);
-    tf::vectorMsgToEigen(odom_msg->eta_dot,eta_dot_d);
-    tf::vectorMsgToEigen(odom_msg->eta_dot_dot,eta_dot_dot_d);
-
-    eta_d           = eta_d         * M_PI/180;
-    eta_dot_d       = eta_dot_d     * M_PI/180;
-    eta_dot_dot_d   = eta_dot_dot_d * M_PI/180;
+    tf::vectorMsgToEigen(traj_msg->position,        eta_d);
+    tf::vectorMsgToEigen(traj_msg->speed,           eta_dot_d);
+    tf::vectorMsgToEigen(traj_msg->acceleration,    eta_dot_dot_d);
 
     Eigen::Vector3d e       = eta       - eta_d;
     Eigen::Vector3d e_dot   = eta_dot   - eta_dot_d;
@@ -68,12 +61,13 @@ int main(int argc, char **argv)
 
     ros::NodeHandle nh("~");
 
-    Kp  = nh.param<double>("Kp", 1) * Eigen::Matrix3d::Identity();
-    Kd  = nh.param<double>("Kd", 1) * Eigen::Matrix3d::Identity();
+    Kp = Eigen::Vector3d(nh.param<double>("Kp_x", 1), nh.param<double>("Kp_y", 1),
+            nh.param<double>("Kp_z", 1)).asDiagonal();
+    Kd = Eigen::Vector3d(nh.param<double>("Kd_x", 1), nh.param<double>("Kd_y", 1),
+            nh.param<double>("Kd_z", 1)).asDiagonal();
     m   = nh.param<double>("mass", 0.1);
-    I = Eigen::Vector3d(nh.param<double>("Ixx", 0.1),
-                        nh.param<double>("Iyy", 0.1),
-                        nh.param<double>("Izz", 0.1)).asDiagonal();
+    I = Eigen::Vector3d(nh.param<double>("Ixx", 0.1), nh.param<double>("Iyy", 0.1),
+            nh.param<double>("Izz", 0.1)).asDiagonal();
 
     v = nh.param<double>("v", 1);
 

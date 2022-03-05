@@ -7,8 +7,8 @@
 
 #include "../Utils/Differentiator.hpp"
 
-#include "quad_control/UavState.h"
-#include "quad_control/DesiredAttritude.h"
+#include "std_msgs/Float64.h"
+#include "quad_control/State.h"
 
 Differentiator<Eigen::Vector3d> eta_dot_filter;
 Differentiator<Eigen::Vector3d> etaDot_dot_filter;
@@ -18,8 +18,8 @@ ros::Publisher  eta_ref_pub;
 
 double m, v, psi_d;
 
-void traj_cb(const quad_control::UavState::ConstPtr& traj_msg) {
-    psi_d = traj_msg->psi_d;
+void traj_cb(const std_msgs::Float64::ConstPtr &traj_msg) {
+    psi_d = traj_msg->data;
 };
 
 void mu_hat_cb(const geometry_msgs::Vector3::ConstPtr& mu_hat_msg) {
@@ -37,10 +37,10 @@ void mu_hat_cb(const geometry_msgs::Vector3::ConstPtr& mu_hat_msg) {
     Eigen::Vector3d etaDot_d = eta_dot_filter.getDifferentiatoredValue(eta_d);
     Eigen::Vector3d etaDotDot_d = etaDot_dot_filter.getDifferentiatoredValue(etaDot_d);
 
-    quad_control::DesiredAttritude msg;
-    tf::vectorEigenToMsg(eta_d       * 180/M_PI, msg.eta);
-    tf::vectorEigenToMsg(etaDot_d    * 180/M_PI, msg.eta_dot);
-    tf::vectorEigenToMsg(etaDotDot_d * 180/M_PI, msg.eta_dot_dot);
+    quad_control::State msg;
+    tf::vectorEigenToMsg(eta_d,         msg.position);
+    tf::vectorEigenToMsg(etaDot_d,      msg.speed);
+    tf::vectorEigenToMsg(etaDotDot_d,   msg.acceleration);
 
     eta_ref_pub.publish(msg);
 }
@@ -61,7 +61,7 @@ int main(int argc, char **argv)
     eta_ref_sub = nh.subscribe("/sub_topic", 1, mu_hat_cb);
     traj_sub    = nh.subscribe("/traj_topic", 1, traj_cb);
 
-    eta_ref_pub = nh.advertise<quad_control::DesiredAttritude>("/eta_ref_topic", 1);
+    eta_ref_pub = nh.advertise<quad_control::State>("/eta_ref_topic", 1);
     
     ros::spin();
 

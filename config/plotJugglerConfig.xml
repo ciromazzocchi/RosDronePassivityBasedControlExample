@@ -1,55 +1,61 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <root>
- <tabbed_widget parent="main_window" name="Main Window">
+ <tabbed_widget name="Main Window" parent="main_window">
   <Tab tab_name="Linear" containers="1">
    <Container>
-    <DockSplitter sizes="1" count="1" orientation="-">
-     <DockSplitter sizes="0.333333;0.333333;0.333333" count="3" orientation="|">
-      <DockSplitter sizes="0.5;0.5" count="2" orientation="-">
+    <DockSplitter orientation="-" sizes="1" count="1">
+     <DockSplitter orientation="|" sizes="0.333333;0.333333;0.333333" count="3">
+      <DockSplitter orientation="-" sizes="0.5;0.5" count="2">
        <DockArea name="Position - x">
         <plot mode="TimeSeries" style="Lines">
-         <range bottom="-0.000000" left="8.764000" top="0.000000" right="13.763000"/>
+         <range right="4.088000" left="0.000000" bottom="-0.100000" top="0.100000"/>
          <limitY/>
-         <curve name="/hummingbird/odometryNED/pose/pose/position/x" color="#1f77b4"/>
+         <curve name="/hummingbird/odometryNED/p/position/x" color="#ff0000"/>
+         <curve name="/hummingbird/trajectory/p/position/x" color="#00ff00"/>
         </plot>
        </DockArea>
        <DockArea name="Speed - x">
         <plot mode="TimeSeries" style="Lines">
-         <range bottom="-0.000005" left="8.764000" top="0.000004" right="13.763000"/>
+         <range right="4.088000" left="0.000000" bottom="-0.000000" top="0.000000"/>
          <limitY/>
-         <curve name="/hummingbird/odometryNED/twist/twist/linear/x" color="#ff7f0e"/>
+         <curve name="/hummingbird/odometryNED/p/speed/x" color="#ff0000"/>
+         <curve name="/hummingbird/trajectory/p/speed/x" color="#00ff00"/>
         </plot>
        </DockArea>
       </DockSplitter>
-      <DockSplitter sizes="0.5;0.5" count="2" orientation="-">
+      <DockSplitter orientation="-" sizes="0.5;0.5" count="2">
        <DockArea name="Position - y">
         <plot mode="TimeSeries" style="Lines">
-         <range bottom="-0.000001" left="8.764000" top="0.000001" right="13.763000"/>
+         <range right="4.088000" left="0.000000" bottom="-0.100000" top="0.100000"/>
          <limitY/>
-         <curve name="/hummingbird/odometryNED/pose/pose/position/y" color="#d62728"/>
+         <curve name="/hummingbird/odometryNED/p/position/y" color="#ff0000"/>
+         <curve name="/hummingbird/trajectory/p/position/y" color="#00ff00"/>
         </plot>
        </DockArea>
        <DockArea name="Speed - y">
         <plot mode="TimeSeries" style="Lines">
-         <range bottom="-0.000013" left="8.764000" top="0.000016" right="13.763000"/>
+         <range right="4.088000" left="0.000000" bottom="-0.000000" top="0.000000"/>
          <limitY/>
-         <curve name="/hummingbird/odometryNED/twist/twist/linear/y" color="#f14cc1"/>
+         <curve name="/hummingbird/odometryNED/p/speed/y" color="#ff0000"/>
+         <curve name="/hummingbird/trajectory/p/speed/y" color="#00ff00"/>
         </plot>
        </DockArea>
       </DockSplitter>
-      <DockSplitter sizes="0.5;0.5" count="2" orientation="-">
+      <DockSplitter orientation="-" sizes="0.5;0.5" count="2">
        <DockArea name="Position - z">
         <plot mode="TimeSeries" style="Lines">
-         <range bottom="-1.008040" left="8.764000" top="-0.895402" right="13.763000"/>
+         <range right="4.088000" left="0.000000" bottom="-0.070250" top="-0.059750"/>
          <limitY/>
-         <curve name="/hummingbird/odometryNED/pose/pose/position/z" color="#1ac938"/>
+         <curve name="/hummingbird/odometryNED/p/position/z" color="#ff0000"/>
+         <curve name="/hummingbird/trajectory/p/position/z" color="#00ff00"/>
         </plot>
        </DockArea>
        <DockArea name="Speed - z">
         <plot mode="TimeSeries" style="Lines">
-         <range bottom="-0.094830" left="8.764000" top="0.055219" right="13.763000"/>
+         <range right="4.088000" left="0.000000" bottom="-0.000000" top="0.000000"/>
          <limitY/>
-         <curve name="/hummingbird/odometryNED/twist/twist/linear/z" color="#9467bd"/>
+         <curve name="/hummingbird/odometryNED/p/speed/z" color="#ff0000"/>
+         <curve name="/hummingbird/trajectory/p/speed/z" color="#00ff00"/>
         </plot>
        </DockArea>
       </DockSplitter>
@@ -59,56 +65,56 @@
   </Tab>
   <Tab tab_name="Angular" containers="1">
    <Container>
-    <DockSplitter sizes="0.5;0.5" count="2" orientation="-">
-     <DockSplitter sizes="0.333333;0.333333;0.333333" count="3" orientation="|">
+    <DockSplitter orientation="-" sizes="0.5;0.5" count="2">
+     <DockSplitter orientation="|" sizes="0.333333;0.333333;0.333333" count="3">
       <DockArea name="Orientation - roll">
        <plot mode="TimeSeries" style="Lines">
-        <range bottom="-0.000003" left="4.613000" top="0.000002" right="9.615000"/>
+        <range right="4.768000" left="0.000000" bottom="-0.100000" top="0.100000"/>
         <limitY/>
-        <curve name="/hummingbird/odometryNED/pose/pose/orientation/roll_deg" color="#d62728"/>
-        <curve name="/hummingbird/eta_reference/eta/x" color="#1f77b4"/>
+        <curve name="/hummingbird/odometryNED/eta/position/x" color="#ff0000"/>
+        <curve name="/hummingbird/eta_reference/position/x" color="#00ff00"/>
        </plot>
       </DockArea>
       <DockArea name="Orientation - pitch">
        <plot mode="TimeSeries" style="Lines">
-        <range bottom="-0.000002" left="4.613000" top="0.000002" right="9.615000"/>
+        <range right="4.768000" left="0.000000" bottom="-0.100000" top="0.100000"/>
         <limitY/>
-        <curve name="/hummingbird/odometryNED/pose/pose/orientation/pitch_deg" color="#1ac938"/>
-        <curve name="/hummingbird/eta_reference/eta/y" color="#d62728"/>
+        <curve name="/hummingbird/odometryNED/eta/position/y" color="#ff0000"/>
+        <curve name="/hummingbird/eta_reference/position/y" color="#00ff00"/>
        </plot>
       </DockArea>
       <DockArea name="Orientation - yaw">
        <plot mode="TimeSeries" style="Lines">
-        <range bottom="-0.000000" left="4.613000" top="0.000000" right="9.615000"/>
+        <range right="4.768000" left="0.000000" bottom="-0.100000" top="0.100000"/>
         <limitY/>
-        <curve name="/hummingbird/odometryNED/pose/pose/orientation/yaw_deg" color="#ff7f0e"/>
-        <curve name="/hummingbird/eta_reference/eta/z" color="#1ac938"/>
+        <curve name="/hummingbird/odometryNED/eta/position/z" color="#ff0000"/>
+        <curve name="/hummingbird/eta_reference/position/z" color="#00ff00"/>
        </plot>
       </DockArea>
      </DockSplitter>
-     <DockSplitter sizes="0.333333;0.333333;0.333333" count="3" orientation="|">
+     <DockSplitter orientation="|" sizes="0.333333;0.333333;0.333333" count="3">
       <DockArea name="Angular Speed - roll">
        <plot mode="TimeSeries" style="Lines">
-        <range bottom="-0.000009" left="4.613000" top="0.000011" right="9.615000"/>
+        <range right="4.768000" left="0.000000" bottom="-0.000000" top="0.000000"/>
         <limitY/>
-        <curve name="/hummingbird/odometryNED/twist/twist/angular/x" color="#17becf"/>
-        <curve name="/hummingbird/eta_reference/eta_dot/x" color="#ff7f0e"/>
+        <curve name="/hummingbird/odometryNED/eta/speed/x" color="#ff0000"/>
+        <curve name="/hummingbird/eta_reference/speed/x" color="#00ff00"/>
        </plot>
       </DockArea>
       <DockArea name="Angular Speed - pitch">
        <plot mode="TimeSeries" style="Lines">
-        <range bottom="-0.000007" left="4.613000" top="0.000007" right="9.615000"/>
+        <range right="4.768000" left="0.000000" bottom="-0.000000" top="0.000000"/>
         <limitY/>
-        <curve name="/hummingbird/odometryNED/twist/twist/angular/y" color="#bcbd22"/>
-        <curve name="/hummingbird/eta_reference/eta_dot/y" color="#f14cc1"/>
+        <curve name="/hummingbird/odometryNED/eta/speed/y" color="#ff0000"/>
+        <curve name="/hummingbird/eta_reference/speed/y" color="#00ff00"/>
        </plot>
       </DockArea>
       <DockArea name="Angular Speed - yaw">
        <plot mode="TimeSeries" style="Lines">
-        <range bottom="-0.000000" left="4.613000" top="0.000000" right="9.615000"/>
+        <range right="4.768000" left="0.000000" bottom="-0.100000" top="0.100000"/>
         <limitY/>
-        <curve name="/hummingbird/odometryNED/twist/twist/angular/z" color="#1f77b4"/>
-        <curve name="/hummingbird/eta_reference/eta_dot/z" color="#9467bd"/>
+        <curve name="/hummingbird/odometryNED/eta/speed/z" color="#ff0000"/>
+        <curve name="/hummingbird/eta_reference/speed/z" color="#00ff00"/>
        </plot>
       </DockArea>
      </DockSplitter>
@@ -117,10 +123,10 @@
   </Tab>
   <Tab tab_name="Estimated Wrench" containers="1">
    <Container>
-    <DockSplitter sizes="0.5;0.5" count="2" orientation="-">
+    <DockSplitter orientation="-" sizes="0.5;0.5" count="2">
      <DockArea name="Linear">
       <plot mode="TimeSeries" style="Lines">
-       <range bottom="-0.100000" left="0.000000" top="0.100000" right="0.000000"/>
+       <range right="4.088000" left="0.000000" bottom="-0.100000" top="0.100000"/>
        <limitY/>
        <curve name="/hummingbird/controller/logData/estimatedWrench/linear/x" color="#ff0000"/>
        <curve name="/hummingbird/controller/logData/estimatedWrench/linear/y" color="#00ff00"/>
@@ -129,7 +135,7 @@
      </DockArea>
      <DockArea name="Angular">
       <plot mode="TimeSeries" style="Lines">
-       <range bottom="-0.100000" left="0.000000" top="0.100000" right="0.000000"/>
+       <range right="4.088000" left="0.000000" bottom="-0.100000" top="0.100000"/>
        <limitY/>
        <curve name="/hummingbird/controller/logData/estimatedWrench/angular/x" color="#ff0000"/>
        <curve name="/hummingbird/controller/logData/estimatedWrench/angular/y" color="#00ff00"/>
@@ -141,10 +147,10 @@
   </Tab>
   <Tab tab_name="Propellers" containers="1">
    <Container>
-    <DockSplitter sizes="0.332762;0.334477;0.332762" count="3" orientation="-">
+    <DockSplitter orientation="-" sizes="0.35;0.35;0.3" count="3">
      <DockArea name="mu">
       <plot mode="TimeSeries" style="Lines">
-       <range bottom="-2.125307" left="8.056000" top="1.639245" right="13.055000"/>
+       <range right="4.088000" left="0.000000" bottom="-1.507353" top="0.036765"/>
        <limitY/>
        <curve name="/hummingbird/mu_hat/x" color="#ff0000"/>
        <curve name="/hummingbird/mu_hat/y" color="#00ff00"/>
@@ -153,14 +159,14 @@
      </DockArea>
      <DockArea name="uT">
       <plot mode="TimeSeries" style="Lines">
-       <range bottom="5.556114" left="8.056000" top="8.116009" right="13.055000"/>
+       <range right="4.088000" left="0.000000" bottom="-0.100000" top="0.100000"/>
        <limitY/>
        <curve name="/hummingbird/command/wrenchNED/force/z" color="#0000ff"/>
       </plot>
      </DockArea>
      <DockArea name="tau">
       <plot mode="TimeSeries" style="Lines">
-       <range bottom="-0.000698" left="8.056000" top="0.000648" right="13.055000"/>
+       <range right="4.088000" left="0.000000" bottom="-0.100000" top="0.100000"/>
        <limitY/>
        <curve name="/hummingbird/command/wrenchNED/torque/x" color="#ff0000"/>
        <curve name="/hummingbird/command/wrenchNED/torque/y" color="#00ff00"/>
@@ -170,7 +176,7 @@
     </DockSplitter>
    </Container>
   </Tab>
-  <currentTabIndex index="0"/>
+  <currentTabIndex index="1"/>
  </tabbed_widget>
  <use_relative_time_offset enabled="1"/>
  <!-- - - - - - - - - - - - - - - -->
@@ -194,9 +200,9 @@
   </plugin>
   <plugin ID="UDP Server"/>
   <plugin ID="WebSocket Server"/>
-  <plugin status="idle" ID="CSV Exporter"/>
-  <plugin status="idle" ID="ROS /rosout Visualization"/>
-  <plugin status="idle" ID="ROS Topic Re-Publisher"/>
+  <plugin ID="CSV Exporter" status="idle"/>
+  <plugin ID="ROS /rosout Visualization" status="idle"/>
+  <plugin ID="ROS Topic Re-Publisher" status="idle"/>
  </Plugins>
  <!-- - - - - - - - - - - - - - - -->
  <previouslyLoaded_Datafiles/>

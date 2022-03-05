@@ -5,8 +5,7 @@
 #include <tf_conversions/tf_eigen.h>
 #include <eigen_conversions/eigen_msg.h>
 
-#include "quad_control/UavState.h"
-#include "nav_msgs/Odometry.h"
+#include "quad_control/State.h"
 
 ros::Subscriber ol_odom_sub,ol_traj_sub;
 ros::Publisher  ol_mu_pub;
@@ -15,16 +14,16 @@ double m;
 Eigen::Vector3d p_d, p_dot_d, p_dot_dot_d;
 Eigen::Matrix3d Kp, Kd;
 
-void traj_cb(const quad_control::UavState::ConstPtr& msg) {
-    tf::vectorMsgToEigen(msg->pose_d.linear,p_d);
-    tf::vectorMsgToEigen(msg->twist_d.linear,p_dot_d);
-    tf::vectorMsgToEigen(msg->wrench_d.linear,p_dot_dot_d);
+void traj_cb(const quad_control::State::ConstPtr& msg) {
+    p_d         << msg->position.x, msg->position.y, msg->position.z;
+    p_dot_d     << msg->speed.x, msg->speed.y, msg->speed.z;
+    p_dot_dot_d << msg->acceleration.x, msg->acceleration.y, msg->acceleration.z; 
 };
 
-void odom_cb(const nav_msgs::Odometry::ConstPtr& odom_msg) {
+void odom_cb(const quad_control::State::ConstPtr& odom_msg) {
     Eigen::Vector3d p, p_dot;
-    tf::pointMsgToEigen(odom_msg->pose.pose.position,p);
-    tf::vectorMsgToEigen(odom_msg->twist.twist.linear,p_dot);
+    tf::vectorMsgToEigen( odom_msg->position ,p      );
+    tf::vectorMsgToEigen( odom_msg->speed    ,p_dot  );
 
     Eigen::Vector3d e = p - p_d;
     Eigen::Vector3d e_dot = p_dot - p_dot_d;
@@ -46,8 +45,10 @@ int main(int argc, char **argv)
     ros::init(argc, argv, "outer_loop_node");
     ros::NodeHandle nh("~");
 
-    Kp  = nh.param<double>("Kp", 1) * Eigen::Matrix3d::Identity();
-    Kd  = nh.param<double>("Kd", 1) * Eigen::Matrix3d::Identity();
+    Kp = Eigen::Vector3d( nh.param<double>("Kp_x", 1), nh.param<double>("Kp_y", 1),
+        nh.param<double>("Kp_z", 1)).asDiagonal();
+    Kd = Eigen::Vector3d( nh.param<double>("Kd_x", 1), nh.param<double>("Kd_y", 1),
+        nh.param<double>("Kd_z", 1)).asDiagonal();
     m   = nh.param<double>("mass", 0.1);
 
     p_d = p_dot_d = p_dot_dot_d = Eigen::Vector3d::Zero();
