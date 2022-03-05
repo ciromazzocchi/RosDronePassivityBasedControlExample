@@ -128,18 +128,18 @@
       <plot mode="TimeSeries" style="Lines">
        <range right="4.088000" left="0.000000" bottom="-0.100000" top="0.100000"/>
        <limitY/>
-       <curve name="/hummingbird/controller/logData/estimatedWrench/linear/x" color="#ff0000"/>
-       <curve name="/hummingbird/controller/logData/estimatedWrench/linear/y" color="#00ff00"/>
-       <curve name="/hummingbird/controller/logData/estimatedWrench/linear/z" color="#0000ff"/>
+       <curve name="/hummingbird/estimator/force/x" color="#ff0000"/>
+       <curve name="/hummingbird/estimator/force/y" color="#00ff00"/>
+       <curve name="/hummingbird/estimator/force/z" color="#0000ff"/>
       </plot>
      </DockArea>
      <DockArea name="Angular">
       <plot mode="TimeSeries" style="Lines">
        <range right="4.088000" left="0.000000" bottom="-0.100000" top="0.100000"/>
        <limitY/>
-       <curve name="/hummingbird/controller/logData/estimatedWrench/angular/x" color="#ff0000"/>
-       <curve name="/hummingbird/controller/logData/estimatedWrench/angular/y" color="#00ff00"/>
-       <curve name="/hummingbird/controller/logData/estimatedWrench/angular/z" color="#0000ff"/>
+       <curve name="/hummingbird/estimator/torque/x" color="#ff0000"/>
+       <curve name="/hummingbird/estimator/torque/y" color="#00ff00"/>
+       <curve name="/hummingbird/estimator/torque/z" color="#0000ff"/>
       </plot>
      </DockArea>
     </DockSplitter>

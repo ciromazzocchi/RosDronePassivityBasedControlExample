@@ -140,3 +140,6 @@ target_link_libraries(eta_reference_node Differentiator Utility ${Eigen_INCLUDE_
 
 add_executable(inner_loop_node src/Nodes/inner_loop_node.cpp)
 target_link_libraries(inner_loop_node Utility Differentiator ${Eigen_INCLUDE_DIRS} ${catkin_LIBRARIES})
+
+add_executable(estimator_node src/Nodes/estimator_node.cpp)
+target_link_libraries(estimator_node Utility ${Eigen_INCLUDE_DIRS} ${catkin_LIBRARIES})

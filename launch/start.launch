@@ -90,7 +90,21 @@
       <remap  from="/mu_topic"      to="/$(arg mav_name)/mu_hat" />
       <remap  from="/pub_topic"     to="/$(arg mav_name)/command/wrenchNED"/>
     </node>
-    -->
+
+    <node name="estimator_node" type="estimator_node" pkg="quad_control">
+      <param name="mass"            type="double"  value="0.68"/>
+      <param name="k0"              type="double"  value="0.01"/>
+      <param name="rate"            type="double"  value="100"/>
+      <param name="Ixx"             type="double"  value="0.007"/>
+      <param name="Iyy"             type="double"  value="0.007"/>
+      <param name="Izz"             type="double"  value="0.012"/>
+      <remap  from="/eta"           to="/$(arg mav_name)/odometryNED/eta" />
+      <remap  from="/p"             to="/$(arg mav_name)/odometryNED/p"/>
+      <remap  from="/cmd"           to="/$(arg mav_name)/command/wrenchNED"/>
+      <remap  from="/est/f"         to="/$(arg mav_name)/estimator/force"/>
+      <remap  from="/est/t"         to="/$(arg mav_name)/estimator/torque"/>
+    </node>
+
 <!--  
     <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
     <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" />
