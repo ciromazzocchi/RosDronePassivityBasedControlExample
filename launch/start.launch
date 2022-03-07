@@ -14,7 +14,8 @@
   <arg name="use_sim_time" default="true" />
   
   <!-- Controller parameters -->
-  <arg name="rate"  default="100" />
+  <arg name="rate"  default="1000" />
+  <arg name="mass"  default="0.60" />
 
   <env name="GAZEBO_MODEL_PATH" value="${GAZEBO_MODEL_PATH}:$(find rotors_gazebo)/models"/>
   <env name="GAZEBO_RESOURCE_PATH" value="${GAZEBO_RESOURCE_PATH}:$(find rotors_gazebo)/models"/>
@@ -51,10 +52,10 @@
     </node>
 
     <node name="outer_loop_node" type="outer_loop_node" pkg="quad_control">
-      <param  name="mass"           type="double" value="0.68"/>
+      <param  name="mass"           type="double" value="$(arg mass)"/>
       <param  name="Kp_x"           type="double" value="100"/>
       <param  name="Kp_y"           type="double" value="100"/>
-      <param  name="Kp_z"           type="double" value="100"/>
+      <param  name="Kp_z"           type="double" value="200"/>
       <param  name="Kd_x"           type="double" value="10"/>
       <param  name="Kd_y"           type="double" value="10"/>
       <param  name="Kd_z"           type="double" value="10"/>
@@ -65,7 +66,7 @@
     </node>
 
     <node name="eta_reference_node" type="eta_reference_node" pkg="quad_control">
-      <param  name="mass"           type="double"  value="0.68"/>
+      <param  name="mass"           type="double"  value="$(arg mass)"/>
       <param  name="kf_d"           type="double"  value="10"/>
       <param  name="kf_dd"          type="double"  value="10"/>
       <remap  from="/sub_topic"     to="/$(arg mav_name)/mu_hat"/>
@@ -74,11 +75,11 @@
     </node>
 
     <node name="inner_loop_node" type="inner_loop_node" pkg="quad_control">
-      <param name="mass"            type="double"  value="0.68"/>
-      <param name="Ixx"             type="double"  value="0.007"/>
-      <param name="Iyy"             type="double"  value="0.007"/>
-      <param name="Izz"             type="double"  value="0.012"/>
-      <param name="v"               type="double"  value="10"/>
+      <param  name="mass"           type="double"  value="$(arg mass)"/>
+      <param  name="Ixx"            type="double"  value="0.007"/>
+      <param  name="Iyy"            type="double"  value="0.007"/>
+      <param  name="Izz"            type="double"  value="0.012"/>
+      <param  name="v"              type="double"  value="10"/>
       <param  name="Kp_x"           type="double" value="1"/>
       <param  name="Kp_y"           type="double" value="1"/>
       <param  name="Kp_z"           type="double" value="1"/>
@@ -93,9 +94,9 @@
     </node>
 
     <node name="estimator_node" type="estimator_node" pkg="quad_control">
-      <param name="mass"            type="double"  value="0.68"/>
-      <param name="k0"              type="double"  value="0.01"/>
-      <param name="rate"            type="double"  value="100"/>
+      <param name="mass"            type="double"  value="$(arg mass)"/>
+      <param name="k0"              type="double"  value="10"/>
+      <param name="rate"            type="double"  value="$(arg rate)"/>
       <param name="Ixx"             type="double"  value="0.007"/>
       <param name="Iyy"             type="double"  value="0.007"/>
       <param name="Izz"             type="double"  value="0.012"/>

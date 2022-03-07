@@ -36,7 +36,7 @@ void odom_eta_cb(const quad_control::State::ConstPtr& odom_msg) {
     Dxi << -getR(eta)*Eigen::Vector3d(0,0,1), Eigen::Matrix3d::Zero(),
         Eigen::Vector3d::Zero(), getQ(eta).transpose();
 
-    Gxi << -m*9.81*Eigen::Vector3d(0,0,1), Eigen::Vector3d::Zero();
+    Gxi << m*9.81*Eigen::Vector3d(0,0,1), Eigen::Vector3d::Zero();
 }
 
 void odom_p_cb(const quad_control::State::ConstPtr& odom_msg) {
@@ -49,7 +49,7 @@ void cmd_cb(const geometry_msgs::Wrench::ConstPtr& cmd_msg) {
     Eigen::Matrix<double,4,1> u;
     u << cmd_msg->force.z, cmd_msg->torque.x, cmd_msg->torque.y, cmd_msg->torque.z;
 
-    F_est = (1+Ts*k0)*F_est + Ts*k0*(Cxi.transpose()*Xi_dot + Dxi*u - Gxi);
+    F_est = F_est / (1+k0*Ts) + (Ts*k0/(1+k0*Ts))*(-Cxi.transpose()*Xi_dot - Dxi*u + Gxi);
 
     geometry_msgs::Wrench msg;
     tf::wrenchEigenToMsg(F_est,msg);
