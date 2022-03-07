@@ -11,7 +11,7 @@
 #include "../Utils/utility.hpp"
 
 ros::Subscriber est_eta_sub, est_p_sub, est_cmd_sub;
-ros::Publisher est_f_pub, est_t_pub;
+ros::Publisher est_pub;
 
 Eigen::Vector3d p_dot, eta, eta_dot;
 
@@ -51,11 +51,9 @@ void cmd_cb(const geometry_msgs::Wrench::ConstPtr& cmd_msg) {
 
     F_est = (1+Ts*k0)*F_est + Ts*k0*(Cxi.transpose()*Xi_dot + Dxi*u - Gxi);
 
-    geometry_msgs::Vector3 msg;
-    msg.x = F_est(0);   msg.y = F_est(1);   msg.z = F_est(2);
-    est_f_pub.publish(msg);
-    msg.x = F_est(3);   msg.y = F_est(4);   msg.z = F_est(5);
-    est_t_pub.publish(msg);
+    geometry_msgs::Wrench msg;
+    tf::wrenchEigenToMsg(F_est,msg);
+    est_pub.publish(msg);
 }
 
 int main(int argc, char **argv)
@@ -78,8 +76,7 @@ int main(int argc, char **argv)
     est_p_sub   = nh.subscribe("/p",    1, odom_p_cb);
     est_cmd_sub = nh.subscribe("/cmd",  1, cmd_cb);
 
-    est_f_pub = nh.advertise<geometry_msgs::Vector3>("/est/f",  1);
-    est_t_pub = nh.advertise<geometry_msgs::Vector3>("/est/t",  1);
+    est_pub = nh.advertise<geometry_msgs::Wrench>("/est_topic",  1);
 
     ros::spin();
 

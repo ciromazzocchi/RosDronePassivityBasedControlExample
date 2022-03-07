@@ -5,14 +5,19 @@
 
 #include "../Utils/utility.hpp"
 
+#include "geometry_msgs/Wrench.h"
 #include "quad_control/State.h"
 
-ros::Subscriber il_sub, il_odom_sub, il_mu_sub;
+ros::Subscriber il_sub, il_odom_sub, il_est_sub, il_mu_sub;
 ros::Publisher  il_cmd_pub;
 
 double m, v;
 Eigen::Matrix3d Kp, Kd, I, M, C, Qt_inv;
-Eigen::Vector3d eta,eta_dot, mu_hat;
+Eigen::Vector3d eta,eta_dot, mu_hat, torque_est;
+
+void est_cb(const geometry_msgs::Wrench::ConstPtr& msg){
+    tf::vectorMsgToEigen(msg->torque, torque_est);
+}
 
 void mu_sub_cb(const geometry_msgs::Vector3::ConstPtr& msg) {
     mu_hat << msg->x, msg->y, msg->z;
@@ -44,12 +49,10 @@ void cb(const quad_control::State::ConstPtr& traj_msg) {
     Eigen::Vector3d eta_dot_r       = eta_dot_d     - v*e;
     Eigen::Vector3d eta_dot_dot_r   = eta_dot_dot_d - v*e_dot;
     Eigen::Vector3d v_eta           = e_dot         + v*e;
-
-    Eigen::Vector3d tau_est = Eigen::Vector3d::Zero();
     
     Eigen::Matrix<double,6,1> wrench;
     wrench << Eigen::Vector3d(0,0,uT),
-            Qt_inv * (M*eta_dot_dot_r + C*eta_dot_r - tau_est - Kd*v_eta - Kp*e);
+            Qt_inv * (M*eta_dot_dot_r + C*eta_dot_r - torque_est - Kd*v_eta - Kp*e);
     geometry_msgs::Wrench msg;
     tf::wrenchEigenToMsg(wrench, msg);
     il_cmd_pub.publish(msg);
@@ -71,13 +74,14 @@ int main(int argc, char **argv)
 
     v = nh.param<double>("v", 1);
 
-    eta = eta_dot = mu_hat = Eigen::Vector3d::Zero();
+    eta = eta_dot = mu_hat = torque_est = Eigen::Vector3d::Zero();
 
     M = C = Qt_inv = Eigen::Matrix3d::Zero();
 
     il_sub      = nh.subscribe("/eta_ref_topic", 1, cb);
-    il_odom_sub = nh.subscribe("/odom_topic", 1, odom_sub_cb);
-    il_mu_sub   = nh.subscribe("/mu_topic", 1, mu_sub_cb);
+    il_odom_sub = nh.subscribe("/odom_topic",    1, odom_sub_cb);
+    il_mu_sub   = nh.subscribe("/mu_topic",      1, mu_sub_cb);
+    il_est_sub  = nh.subscribe("/est_topic",     1, est_cb);
     il_cmd_pub  = nh.advertise<geometry_msgs::Wrench>("/pub_topic", 1);
     
     ros::spin();

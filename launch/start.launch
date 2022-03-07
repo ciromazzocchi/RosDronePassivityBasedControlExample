@@ -60,9 +60,9 @@
       <param  name="Kd_z"           type="double" value="10"/>
       <remap  from="/traj_topic"    to="/$(arg mav_name)/trajectory/p"/>
       <remap  from="/odom_topic"    to="/$(arg mav_name)/odometryNED/p"/>
+      <remap  from="/est_topic"     to="/$(arg mav_name)/estimator"/>
       <remap  from="/mu_hat"        to="/$(arg mav_name)/mu_hat"/>
     </node>
-
 
     <node name="eta_reference_node" type="eta_reference_node" pkg="quad_control">
       <param  name="mass"           type="double"  value="0.68"/>
@@ -88,6 +88,7 @@
       <remap  from="/eta_ref_topic" to="/$(arg mav_name)/eta_reference"/>
       <remap  from="/odom_topic"    to="/$(arg mav_name)/odometryNED/eta"/>
       <remap  from="/mu_topic"      to="/$(arg mav_name)/mu_hat" />
+      <remap  from="/est_topic"     to="/$(arg mav_name)/estimator" />
       <remap  from="/pub_topic"     to="/$(arg mav_name)/command/wrenchNED"/>
     </node>
 
@@ -101,8 +102,7 @@
       <remap  from="/eta"           to="/$(arg mav_name)/odometryNED/eta" />
       <remap  from="/p"             to="/$(arg mav_name)/odometryNED/p"/>
       <remap  from="/cmd"           to="/$(arg mav_name)/command/wrenchNED"/>
-      <remap  from="/est/f"         to="/$(arg mav_name)/estimator/force"/>
-      <remap  from="/est/t"         to="/$(arg mav_name)/estimator/torque"/>
+      <remap  from="/est_topic"     to="/$(arg mav_name)/estimator"/>
     </node>
 
 <!--  
