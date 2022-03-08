@@ -53,10 +53,11 @@ int main(int argc, char **argv)
     m       = nh.param<double>("mass", 0.1);
     psi_d = 0;
 
+    double rate = nh.param<double>("rate", 100);
     double kf_d = nh.param<double>("kf_d", 100);
     double kf_dd = nh.param<double>("kf_dd", 100);
-    eta_dot_filter.DifferentiatorInit( kf_d, 0.01 );
-    etaDot_dot_filter.DifferentiatorInit( kf_dd, 0.01 );
+    eta_dot_filter.DifferentiatorInit( kf_d, 1/rate );
+    etaDot_dot_filter.DifferentiatorInit( kf_dd, 1/rate );
 
     eta_ref_sub = nh.subscribe("/sub_topic", 1, mu_hat_cb);
     traj_sub    = nh.subscribe("/traj_topic", 1, traj_cb);

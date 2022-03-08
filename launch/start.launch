@@ -15,7 +15,10 @@
   
   <!-- Controller parameters -->
   <arg name="rate"  default="1000" />
-  <arg name="mass"  default="0.60" />
+  <arg name="mass"  default="0.68" />
+  <arg name="Ixx"  default="0.007" />
+  <arg name="Iyy"  default="0.007" />
+  <arg name="Izz"  default="0.012" />
 
   <env name="GAZEBO_MODEL_PATH" value="${GAZEBO_MODEL_PATH}:$(find rotors_gazebo)/models"/>
   <env name="GAZEBO_RESOURCE_PATH" value="${GAZEBO_RESOURCE_PATH}:$(find rotors_gazebo)/models"/>
@@ -46,6 +49,10 @@
     </node> 
 
     <node name="trajectory_node" type="trajectory_node" pkg="quad_control">
+      <param  name="threshold"      type="double" value="0.2"/>
+      <param  name="ka"             type="double" value="0.5"/>
+      <param  name="kf_d"           type="double" value="10"/>
+      <param  name="rate"           type="double" value="$(arg rate)"/>
       <remap  from="/p"             to="/$(arg mav_name)/odometryNED/p"/>
       <remap  from="/traj/p"        to="/$(arg mav_name)/trajectory/p"/>
       <remap  from="/traj/yaw"      to="/$(arg mav_name)/trajectory/yaw"/>
@@ -55,7 +62,7 @@
       <param  name="mass"           type="double" value="$(arg mass)"/>
       <param  name="Kp_x"           type="double" value="100"/>
       <param  name="Kp_y"           type="double" value="100"/>
-      <param  name="Kp_z"           type="double" value="200"/>
+      <param  name="Kp_z"           type="double" value="100"/>
       <param  name="Kd_x"           type="double" value="10"/>
       <param  name="Kd_y"           type="double" value="10"/>
       <param  name="Kd_z"           type="double" value="10"/>
@@ -67,6 +74,7 @@
 
     <node name="eta_reference_node" type="eta_reference_node" pkg="quad_control">
       <param  name="mass"           type="double"  value="$(arg mass)"/>
+      <param  name="rate"           type="double" value="$(arg rate)"/>
       <param  name="kf_d"           type="double"  value="10"/>
       <param  name="kf_dd"          type="double"  value="10"/>
       <remap  from="/sub_topic"     to="/$(arg mav_name)/mu_hat"/>
@@ -76,15 +84,15 @@
 
     <node name="inner_loop_node" type="inner_loop_node" pkg="quad_control">
       <param  name="mass"           type="double"  value="$(arg mass)"/>
-      <param  name="Ixx"            type="double"  value="0.007"/>
-      <param  name="Iyy"            type="double"  value="0.007"/>
-      <param  name="Izz"            type="double"  value="0.012"/>
-      <param  name="v"              type="double"  value="10"/>
-      <param  name="Kp_x"           type="double" value="1"/>
-      <param  name="Kp_y"           type="double" value="1"/>
+      <param  name="Ixx"            type="double"  value="$(arg Ixx)"/>
+      <param  name="Iyy"            type="double"  value="$(arg Iyy)"/>
+      <param  name="Izz"            type="double"  value="$(arg Izz)"/>
+      <param  name="v"              type="double"  value="20"/>
+      <param  name="Kp_x"           type="double" value="0.6"/>
+      <param  name="Kp_y"           type="double" value="0.6"/>
       <param  name="Kp_z"           type="double" value="1"/>
-      <param  name="Kd_x"           type="double" value="0.5"/>
-      <param  name="Kd_y"           type="double" value="0.5"/>
+      <param  name="Kd_x"           type="double" value="0.3"/>
+      <param  name="Kd_y"           type="double" value="0.3"/>
       <param  name="Kd_z"           type="double" value="0.5"/>
       <remap  from="/eta_ref_topic" to="/$(arg mav_name)/eta_reference"/>
       <remap  from="/odom_topic"    to="/$(arg mav_name)/odometryNED/eta"/>
@@ -92,20 +100,20 @@
       <remap  from="/est_topic"     to="/$(arg mav_name)/estimator" />
       <remap  from="/pub_topic"     to="/$(arg mav_name)/command/wrenchNED"/>
     </node>
-
+<!--
     <node name="estimator_node" type="estimator_node" pkg="quad_control">
       <param name="mass"            type="double"  value="$(arg mass)"/>
       <param name="k0"              type="double"  value="10"/>
       <param name="rate"            type="double"  value="$(arg rate)"/>
-      <param name="Ixx"             type="double"  value="0.007"/>
-      <param name="Iyy"             type="double"  value="0.007"/>
-      <param name="Izz"             type="double"  value="0.012"/>
+      <param  name="Ixx"            type="double"  value="$(arg Ixx)"/>
+      <param  name="Iyy"            type="double"  value="$(arg Iyy)"/>
+      <param  name="Izz"            type="double"  value="$(arg Izz)"/>
       <remap  from="/eta"           to="/$(arg mav_name)/odometryNED/eta" />
       <remap  from="/p"             to="/$(arg mav_name)/odometryNED/p"/>
       <remap  from="/cmd"           to="/$(arg mav_name)/command/wrenchNED"/>
       <remap  from="/est_topic"     to="/$(arg mav_name)/estimator"/>
     </node>
-
+-->
 <!--  
     <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
     <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" />
