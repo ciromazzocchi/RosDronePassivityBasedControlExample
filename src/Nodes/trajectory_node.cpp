@@ -70,7 +70,7 @@ int main(int argc, char **argv)
 
     waypoints_list.push_back(Eigen::Vector3d(0,0,-1));
     waypoints_list.push_back(Eigen::Vector3d(0,1,-2));
-    waypoints_list.push_back(Eigen::Vector3d(0,1,-0.6));
+    waypoints_list.push_back(Eigen::Vector3d(0,1,-0.06));
 
     actual_point = waypoints_list.begin();
 

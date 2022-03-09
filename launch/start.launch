@@ -69,8 +69,8 @@
     <node name="eta_reference_node" type="eta_reference_node" pkg="quad_control">
       <param  name="mass"           type="double"  value="$(arg mass)"/>
       <param  name="rate"           type="double" value="$(arg rate)"/>
-      <param  name="kf_d"           type="double"  value="10"/>
-      <param  name="kf_dd"          type="double"  value="10"/>
+      <param  name="kf_d"           type="double"  value="3"/>
+      <param  name="kf_dd"          type="double"  value="3"/>
       <remap  from="/sub_topic"     to="/$(arg mav_name)/mu_hat"/>
       <remap  from="/traj_topic"    to="/$(arg mav_name)/trajectory/yaw"/>
       <remap  from="/eta_ref_topic" to="/$(arg mav_name)/eta_reference"/>
