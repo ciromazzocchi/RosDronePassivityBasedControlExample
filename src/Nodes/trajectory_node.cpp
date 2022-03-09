@@ -35,7 +35,6 @@ void odom_cb(const quad_control::State::ConstPtr& odom_msg) {
 
     Eigen::Vector3d error = waypoints_list.front()-p;
     
-    ROS_ERROR_STREAM(waypoints_list.size());
     if(error.norm() < threshold & p_dot.norm() < 0.01 & (waypoints_list.size()>1)) 
         waypoints_list.pop_front();
 

@@ -48,11 +48,14 @@ int main(int argc, char **argv)
     ros::init(argc, argv, "outer_loop_node");
     ros::NodeHandle nh("~");
 
-    Kp = Eigen::Vector3d( nh.param<double>("Kp_x", 1), nh.param<double>("Kp_y", 1),
-        nh.param<double>("Kp_z", 1)).asDiagonal();
-    Kd = Eigen::Vector3d( nh.param<double>("Kd_x", 1), nh.param<double>("Kd_y", 1),
-        nh.param<double>("Kd_z", 1)).asDiagonal();
+   
     m   = nh.param<double>("mass", 0.1);
+
+    double xi = nh.param<double>("xi",0.9);
+    double wn = nh.param<double>("wn",25);
+
+    Kp = 2*xi*wn   * m * Eigen::Matrix3d::Identity();
+    Kd = pow(wn,2) * m * Eigen::Matrix3d::Identity();
 
     p_d = p_dot_d = p_dot_dot_d = force_est = Eigen::Vector3d::Zero();
 

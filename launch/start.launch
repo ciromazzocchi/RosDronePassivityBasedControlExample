@@ -39,8 +39,6 @@
       <arg name="log_file" value="$(arg log_file)"/>
     </include>
   
-    <include file="$(find quad_control)/launch/plot_juggler.launch"/>
-
     <node name="odometry_node" type="odometry_node" pkg="quad_control">
       <param  name="rate"           type="double" value="$(arg rate)"/>
       <remap  from="/odometry"      to="/$(arg mav_name)/ground_truth/odometryNED"/>
@@ -60,12 +58,8 @@
 
     <node name="outer_loop_node" type="outer_loop_node" pkg="quad_control">
       <param  name="mass"           type="double" value="$(arg mass)"/>
-      <param  name="Kp_x"           type="double" value="100"/>
-      <param  name="Kp_y"           type="double" value="100"/>
-      <param  name="Kp_z"           type="double" value="100"/>
-      <param  name="Kd_x"           type="double" value="10"/>
-      <param  name="Kd_y"           type="double" value="10"/>
-      <param  name="Kd_z"           type="double" value="10"/>
+      <param  name="xi"             type="double" value="0.9"/>
+      <param  name="wn"             type="double" value="3"/>
       <remap  from="/traj_topic"    to="/$(arg mav_name)/trajectory/p"/>
       <remap  from="/odom_topic"    to="/$(arg mav_name)/odometryNED/p"/>
       <remap  from="/est_topic"     to="/$(arg mav_name)/estimator"/>
@@ -87,13 +81,9 @@
       <param  name="Ixx"            type="double"  value="$(arg Ixx)"/>
       <param  name="Iyy"            type="double"  value="$(arg Iyy)"/>
       <param  name="Izz"            type="double"  value="$(arg Izz)"/>
-      <param  name="v"              type="double"  value="20"/>
-      <param  name="Kp_x"           type="double" value="0.6"/>
-      <param  name="Kp_y"           type="double" value="0.6"/>
-      <param  name="Kp_z"           type="double" value="1"/>
-      <param  name="Kd_x"           type="double" value="0.3"/>
-      <param  name="Kd_y"           type="double" value="0.3"/>
-      <param  name="Kd_z"           type="double" value="0.5"/>
+      <param  name="v"              type="double"  value="25"/>
+      <param  name="xi"             type="double" value="0.9"/>
+      <param  name="wn"             type="double" value="5"/>
       <remap  from="/eta_ref_topic" to="/$(arg mav_name)/eta_reference"/>
       <remap  from="/odom_topic"    to="/$(arg mav_name)/odometryNED/eta"/>
       <remap  from="/mu_topic"      to="/$(arg mav_name)/mu_hat" />
@@ -114,7 +104,9 @@
       <remap  from="/est_topic"     to="/$(arg mav_name)/estimator"/>
     </node>
 -->
-<!--  
+  
+    <include file="$(find quad_control)/launch/plot_juggler.launch"/>
+
     <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
     <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" />
 
@@ -123,6 +115,5 @@
     <node pkg="tf" type="static_transform_publisher" name="bodyNED" args="0 0 0 1.57079 0 3.14159  hummingbird/base_link hummingbird/base_linkNED  100"/>
     
      <node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)"  />
-    -->
   </group>
 </launch>
