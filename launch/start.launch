@@ -38,7 +38,7 @@
       <arg name="enable_ground_truth" value="$(arg enable_ground_truth)" />
       <arg name="log_file" value="$(arg log_file)"/>
     </include>
-  
+
     <node name="odometry_node" type="odometry_node" pkg="quad_control">
       <param  name="rate"           type="double" value="$(arg rate)"/>
       <remap  from="/odometry"      to="/$(arg mav_name)/ground_truth/odometryNED"/>
@@ -104,9 +104,10 @@
       <remap  from="/est_topic"     to="/$(arg mav_name)/estimator"/>
     </node>
 -->
-  
     <include file="$(find quad_control)/launch/plot_juggler.launch"/>
 
+
+<!--
     <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
     <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" />
 
@@ -115,5 +116,6 @@
     <node pkg="tf" type="static_transform_publisher" name="bodyNED" args="0 0 0 1.57079 0 3.14159  hummingbird/base_link hummingbird/base_linkNED  100"/>
     
      <node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)"  />
+-->
   </group>
 </launch>
