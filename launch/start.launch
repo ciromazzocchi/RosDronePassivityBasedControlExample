@@ -83,27 +83,27 @@
       <param  name="Izz"            type="double"  value="$(arg Izz)"/>
       <param  name="v"              type="double"  value="25"/>
       <param  name="xi"             type="double" value="0.9"/>
-      <param  name="wn"             type="double" value="5"/>
+      <param  name="wn"             type="double" value="3"/>
       <remap  from="/eta_ref_topic" to="/$(arg mav_name)/eta_reference"/>
       <remap  from="/odom_topic"    to="/$(arg mav_name)/odometryNED/eta"/>
       <remap  from="/mu_topic"      to="/$(arg mav_name)/mu_hat" />
       <remap  from="/est_topic"     to="/$(arg mav_name)/estimator" />
       <remap  from="/pub_topic"     to="/$(arg mav_name)/command/wrenchNED"/>
     </node>
-<!--
+
     <node name="estimator_node" type="estimator_node" pkg="quad_control">
       <param name="mass"            type="double"  value="$(arg mass)"/>
-      <param name="k0"              type="double"  value="10"/>
       <param name="rate"            type="double"  value="$(arg rate)"/>
       <param  name="Ixx"            type="double"  value="$(arg Ixx)"/>
       <param  name="Iyy"            type="double"  value="$(arg Iyy)"/>
       <param  name="Izz"            type="double"  value="$(arg Izz)"/>
+      <param name="k0"              type="double"  value="2"/>
       <remap  from="/eta"           to="/$(arg mav_name)/odometryNED/eta" />
       <remap  from="/p"             to="/$(arg mav_name)/odometryNED/p"/>
       <remap  from="/cmd"           to="/$(arg mav_name)/command/wrenchNED"/>
       <remap  from="/est_topic"     to="/$(arg mav_name)/estimator"/>
     </node>
--->
+
     <include file="$(find quad_control)/launch/plot_juggler.launch"/>
 
 
