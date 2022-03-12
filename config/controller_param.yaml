@@ -2,7 +2,7 @@ rate:     1000
 
 # outerloop parameters
 ol_xi:    0.9
-ol_wn:    1
+ol_wn:    2
 
 # eta_reference parameters
 er_kf_d:  3
@@ -14,4 +14,4 @@ il_xi:    0.95
 il_wn:    3
 
 # wrench estimator
-we_k0:    5
+we_k0:    3

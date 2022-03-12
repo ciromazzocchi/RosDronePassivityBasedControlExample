@@ -1,4 +1,7 @@
-mass: 0.68
-Ixx:  0.007
-Iyy:  0.007
-Izz:  0.012
+# mass of uav is 0.68 kg
+# inertia of uav is [7 7 12] * 10^-3 kg*m^2
+# but we are supposing that these parameters are underestiamted of 10%
+mass: 0.62
+Ixx:  0.0063
+Iyy:  0.0063
+Izz:  0.0108
