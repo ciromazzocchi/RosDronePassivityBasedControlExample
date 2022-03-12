@@ -73,7 +73,6 @@
     </node>
 
     <node name="estimator_node" type="estimator_node" pkg="quad_control">
-      <param name="k0"              type="double"  value="2"/>
       <remap  from="/eta"           to="/$(arg mav_name)/odometryNED/eta" />
       <remap  from="/p"             to="/$(arg mav_name)/odometryNED/p"/>
       <remap  from="/cmd"           to="/$(arg mav_name)/command/wrenchNED"/>

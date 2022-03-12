@@ -67,7 +67,7 @@ int main(int argc, char **argv)
     
     m = nh.param<double>("/mass", 0.1);
     
-    k0 = nh.param<double>("k0", 1);
+    k0 = nh.param<double>("/we_k0", 1);
 
     Ts =  1/nh.param<double>("/rate", 100);
 
