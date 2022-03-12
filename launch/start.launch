@@ -1,6 +1,6 @@
 <launch>
   <arg name="mav_name" default="hummingbird"/>
-  <arg name="world_name" default="arena"/>
+  <arg name="world_name" default="arena_with_columns"/>
   <arg name="enable_logging" default="false" />
   <arg name="enable_ground_truth" default="true" />
   <arg name="log_file" default="$(arg mav_name)" />
@@ -14,11 +14,8 @@
   <arg name="use_sim_time" default="true" />
   
   <!-- Controller parameters -->
-  <arg name="rate"  default="1000" />
-  <arg name="mass"  default="0.68" />
-  <arg name="Ixx"  default="0.007" />
-  <arg name="Iyy"  default="0.007" />
-  <arg name="Izz"  default="0.012" />
+  <rosparam file="$(find quad_control)/config/drone_param.yaml" />
+  <rosparam file="$(find quad_control)/config/controller_param.yaml" />  
 
   <env name="GAZEBO_MODEL_PATH" value="${GAZEBO_MODEL_PATH}:$(find rotors_gazebo)/models"/>
   <env name="GAZEBO_RESOURCE_PATH" value="${GAZEBO_RESOURCE_PATH}:$(find rotors_gazebo)/models"/>
@@ -40,7 +37,6 @@
     </include>
 
     <node name="odometry_node" type="odometry_node" pkg="quad_control">
-      <param  name="rate"           type="double" value="$(arg rate)"/>
       <remap  from="/odometry"      to="/$(arg mav_name)/ground_truth/odometryNED"/>
       <remap  from="/p"             to="/$(arg mav_name)/odometryNED/p"/>
       <remap  from="/eta"           to="/$(arg mav_name)/odometryNED/eta"/>
@@ -50,16 +46,12 @@
       <param  name="threshold"      type="double" value="0.2"/>
       <param  name="ka"             type="double" value="0.5"/>
       <param  name="kf_d"           type="double" value="10"/>
-      <param  name="rate"           type="double" value="$(arg rate)"/>
       <remap  from="/p"             to="/$(arg mav_name)/odometryNED/p"/>
       <remap  from="/traj/p"        to="/$(arg mav_name)/trajectory/p"/>
       <remap  from="/traj/yaw"      to="/$(arg mav_name)/trajectory/yaw"/>
     </node>
 
     <node name="outer_loop_node" type="outer_loop_node" pkg="quad_control">
-      <param  name="mass"           type="double" value="$(arg mass)"/>
-      <param  name="xi"             type="double" value="0.9"/>
-      <param  name="wn"             type="double" value="3"/>
       <remap  from="/traj_topic"    to="/$(arg mav_name)/trajectory/p"/>
       <remap  from="/odom_topic"    to="/$(arg mav_name)/odometryNED/p"/>
       <remap  from="/est_topic"     to="/$(arg mav_name)/estimator"/>
@@ -67,23 +59,12 @@
     </node>
 
     <node name="eta_reference_node" type="eta_reference_node" pkg="quad_control">
-      <param  name="mass"           type="double"  value="$(arg mass)"/>
-      <param  name="rate"           type="double" value="$(arg rate)"/>
-      <param  name="kf_d"           type="double"  value="3"/>
-      <param  name="kf_dd"          type="double"  value="3"/>
       <remap  from="/sub_topic"     to="/$(arg mav_name)/mu_hat"/>
       <remap  from="/traj_topic"    to="/$(arg mav_name)/trajectory/yaw"/>
       <remap  from="/eta_ref_topic" to="/$(arg mav_name)/eta_reference"/>
     </node>
 
     <node name="inner_loop_node" type="inner_loop_node" pkg="quad_control">
-      <param  name="mass"           type="double"  value="$(arg mass)"/>
-      <param  name="Ixx"            type="double"  value="$(arg Ixx)"/>
-      <param  name="Iyy"            type="double"  value="$(arg Iyy)"/>
-      <param  name="Izz"            type="double"  value="$(arg Izz)"/>
-      <param  name="v"              type="double"  value="25"/>
-      <param  name="xi"             type="double" value="0.9"/>
-      <param  name="wn"             type="double" value="3"/>
       <remap  from="/eta_ref_topic" to="/$(arg mav_name)/eta_reference"/>
       <remap  from="/odom_topic"    to="/$(arg mav_name)/odometryNED/eta"/>
       <remap  from="/mu_topic"      to="/$(arg mav_name)/mu_hat" />
@@ -92,11 +73,6 @@
     </node>
 
     <node name="estimator_node" type="estimator_node" pkg="quad_control">
-      <param name="mass"            type="double"  value="$(arg mass)"/>
-      <param name="rate"            type="double"  value="$(arg rate)"/>
-      <param  name="Ixx"            type="double"  value="$(arg Ixx)"/>
-      <param  name="Iyy"            type="double"  value="$(arg Iyy)"/>
-      <param  name="Izz"            type="double"  value="$(arg Izz)"/>
       <param name="k0"              type="double"  value="2"/>
       <remap  from="/eta"           to="/$(arg mav_name)/odometryNED/eta" />
       <remap  from="/p"             to="/$(arg mav_name)/odometryNED/p"/>

@@ -49,10 +49,10 @@ int main(int argc, char **argv)
     ros::NodeHandle nh("~");
 
    
-    m   = nh.param<double>("mass", 0.1);
+    m   = nh.param<double>("/mass", 0.1);
 
-    double xi = nh.param<double>("xi",0.9);
-    double wn = nh.param<double>("wn",25);
+    double xi = nh.param<double>("/ol_xi",0.9);
+    double wn = nh.param<double>("/ol_wn",25);
 
     Kp = 2*xi*wn   * m * Eigen::Matrix3d::Identity();
     Kd = pow(wn,2) * m * Eigen::Matrix3d::Identity();

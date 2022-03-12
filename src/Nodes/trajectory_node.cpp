@@ -35,7 +35,7 @@ void odom_cb(const quad_control::State::ConstPtr& odom_msg) {
 
     Eigen::Vector3d error = waypoints_list.front()-p;
     
-    if(error.norm() < threshold & p_dot.norm() < 0.01 & (waypoints_list.size()>1)) 
+    if(error.norm() < threshold & p_dot.norm() < 0.5 & (waypoints_list.size()>1)) 
         waypoints_list.pop_front();
 
     Eigen::Vector3d position, speed, acceleration;
@@ -43,7 +43,8 @@ void odom_cb(const quad_control::State::ConstPtr& odom_msg) {
     acceleration = acceleration_filter.getDifferentiatoredValue(speed);
     position = p + speed/rate;
 
-    double psi = 0; 
+
+    double psi = 0;
 
     quad_control::State msg1;
     tf::vectorEigenToMsg(position,      msg1.position);
@@ -63,14 +64,14 @@ int main(int argc, char **argv)
 
     threshold   = nh.param<double>("threshold", 0.01);
     ka          = nh.param<double>("ka", 10);
-    rate        = nh.param<double>("rate", 1000);
+    rate        = nh.param<double>("/rate", 1000);
     double kf_d = nh.param<double>("kf_d", 100);
 
     acceleration_filter.DifferentiatorInit( kf_d, 1/rate );
 
     waypoints_list.push_back(Eigen::Vector3d(0,0,-1));
-    waypoints_list.push_back(Eigen::Vector3d(0,1,-2));
-    waypoints_list.push_back(Eigen::Vector3d(0,1,-0.06));
+    waypoints_list.push_back(Eigen::Vector3d(7,7,-2));
+    waypoints_list.push_back(Eigen::Vector3d(7,7,-0.06));
 
     actual_point = waypoints_list.begin();
 

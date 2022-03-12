@@ -64,17 +64,18 @@ int main(int argc, char **argv)
 
     ros::NodeHandle nh("~");
 
-    m   = nh.param<double>("mass", 0.1);
-    I = Eigen::Vector3d(nh.param<double>("Ixx", 0.1), nh.param<double>("Iyy", 0.1),
-            nh.param<double>("Izz", 0.1)).asDiagonal();
+    m   = nh.param<double>("/mass", 0.1);
+    I = Eigen::Vector3d(nh.param<double>("/Ixx", 0.1),
+                        nh.param<double>("/Iyy", 0.1),
+                        nh.param<double>("/Izz", 0.1)).asDiagonal();
 
-    double xi = nh.param<double>("xi",0.9);
-    double wn = nh.param<double>("wn",25);
+    double xi = nh.param<double>("/il_xi",0.9);
+    double wn = nh.param<double>("/il_wn",25);
 
     Kp = 2*xi*wn   * I;
     Kd = pow(wn,2) * I;
 
-    v = nh.param<double>("v", 1);
+    v = nh.param<double>("/il_v", 1);
 
     eta = eta_dot = mu_hat = torque_est = Eigen::Vector3d::Zero();
 

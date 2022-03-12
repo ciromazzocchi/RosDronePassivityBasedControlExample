@@ -65,7 +65,7 @@ int main(int argc, char **argv)
     odom_eta_pub    = nh.advertise<quad_control::State>("/eta", 1);
 
     /* Initializes rate to x frequency */
-    ros::Rate rate( nh.param<double>("rate", 100) );
+    ros::Rate rate( nh.param<double>("/rate", 100) );
 
     /* Starts */
     while(ros::ok()) {

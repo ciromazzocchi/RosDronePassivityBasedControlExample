@@ -50,12 +50,12 @@ int main(int argc, char **argv)
     ros::init(argc, argv, "eta_reference_node");
     ros::NodeHandle nh("~");
 
-    m       = nh.param<double>("mass", 0.1);
+    m       = nh.param<double>("/mass", 0.1);
     psi_d = 0;
 
-    double rate = nh.param<double>("rate", 100);
-    double kf_d = nh.param<double>("kf_d", 100);
-    double kf_dd = nh.param<double>("kf_dd", 100);
+    double rate = nh.param<double>("/rate", 100);
+    double kf_d = nh.param<double>("/er_kf_d", 100);
+    double kf_dd = nh.param<double>("/er_kf_dd", 100);
     eta_dot_filter.DifferentiatorInit( kf_d, 1/rate );
     etaDot_dot_filter.DifferentiatorInit( kf_dd, 1/rate );
 

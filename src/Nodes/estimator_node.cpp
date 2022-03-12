@@ -61,14 +61,15 @@ int main(int argc, char **argv)
     ros::init(argc, argv, "estimator_node");
     ros::NodeHandle nh("~");
 
-    I = Eigen::Vector3d(nh.param<double>("Ixx", 0.1), nh.param<double>("Iyy", 0.1),
-            nh.param<double>("Izz", 0.1)).asDiagonal();
+    I = Eigen::Vector3d(nh.param<double>("/Ixx", 0.1),
+                        nh.param<double>("/Iyy", 0.1),
+                        nh.param<double>("/Izz", 0.1)).asDiagonal();
     
-    m = nh.param<double>("mass", 0.1);
+    m = nh.param<double>("/mass", 0.1);
     
     k0 = nh.param<double>("k0", 1);
 
-    Ts =  1/nh.param<double>("rate", 100);
+    Ts =  1/nh.param<double>("/rate", 100);
 
     F_est = Eigen::Matrix<double,6,1>::Zero();
 
