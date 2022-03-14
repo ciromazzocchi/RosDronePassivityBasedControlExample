@@ -18,7 +18,7 @@ std::list<Eigen::Vector3d> waypoints_list;
 
 std::list<Eigen::Vector3d>::iterator actual_point;
 
-double threshold, ka, rate;
+double threshold, ka, rate, psi;
 
 Differentiator<Eigen::Vector3d> acceleration_filter;
 
@@ -43,8 +43,8 @@ void odom_cb(const quad_control::State::ConstPtr& odom_msg) {
     acceleration = acceleration_filter.getDifferentiatoredValue(speed);
     position = p + speed/rate;
 
-
-    double psi = 0;
+    if(error.x() >= 0.01)
+        psi = atan2(p.y(),p.x()) - M_PI_2 ;
 
     quad_control::State msg1;
     tf::vectorEigenToMsg(position,      msg1.position);
@@ -61,6 +61,8 @@ int main(int argc, char **argv)
 {
     ros::init(argc, argv, "trajectory_node");
     ros::NodeHandle nh("~");
+
+    psi = 0;
 
     threshold   = nh.param<double>("threshold", 0.01);
     ka          = nh.param<double>("ka", 10);
