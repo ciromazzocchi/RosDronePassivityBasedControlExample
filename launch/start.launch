@@ -10,7 +10,6 @@
   <!-- The following line causes gzmsg and gzerr messages to be printed to the console
       (even when Gazebo is started through roslaunch) -->
   <arg name="verbose" default="false"/>
-  <arg name="rvizconfig" default="$(find quad_control)/drone.rviz" />
   <arg name="use_sim_time" default="true" />
   
   <!-- Controller parameters -->
@@ -27,10 +26,18 @@
     <arg name="verbose" value="$(arg verbose)"/>
   </include>
 
+  <include file="$(find quad_control)/launch/octomap_server.launch">
+      <arg name="mav_name" value="$(arg mav_name)" />
+    </include>
+
+<!--
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find quad_control)/config/octomap.rviz"  />
+-->
+
   <group ns="$(arg mav_name)">
     <include file="$(find rotors_gazebo)/launch/spawn_mav.launch">
       <arg name="mav_name" value="$(arg mav_name)" />
-      <arg name="model" value="$(find rotors_description)/urdf/mav_generic_odometry_sensor.gazebo" />
+      <arg name="model" value="$(find quad_control)/urdf/mav_with_vi_sensor.gazebo" />
       <arg name="enable_logging" value="$(arg enable_logging)" />
       <arg name="enable_ground_truth" value="$(arg enable_ground_truth)" />
       <arg name="log_file" value="$(arg log_file)"/>
@@ -81,16 +88,13 @@
 
     <include file="$(find quad_control)/launch/plot_juggler.launch"/>
 
-
-<!--
     <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
     <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" />
 
-    <node pkg="tf" type="static_transform_publisher" name="maptf" args="0 0 0 0 0 0  world /map  100"/>
-    <node pkg="tf" type="static_transform_publisher" name="wNED" args="0 0 0 1.57079 0 3.14159  world worldNED  100"/>
-    <node pkg="tf" type="static_transform_publisher" name="bodyNED" args="0 0 0 1.57079 0 3.14159  hummingbird/base_link hummingbird/base_linkNED  100"/>
+    <node pkg="tf" type="static_transform_publisher" name="maptf" args="0 0 0 0 0 0  world /map  10"/>
+    <node pkg="tf" type="static_transform_publisher" name="wNED" args="0 0 0 1.57079 0 3.14159  world worldNED  10"/>
+    <node pkg="tf" type="static_transform_publisher" name="bodyNED" args="0 0 0 1.57079 0 3.14159  hummingbird/base_link hummingbird/base_linkNED  10"/>
     
-     <node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)"  />
--->
+     <node name="rviz" pkg="rviz" type="rviz" args="-d $(find quad_control)/config/drone.rviz"  />
   </group>
 </launch>
