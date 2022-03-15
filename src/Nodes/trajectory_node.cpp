@@ -12,6 +12,7 @@
 #include "../Utils/utility.hpp"
 
 #include "std_msgs/Float64.h"
+#include "nav_msgs/Odometry.h"
 #include "quad_control/State.h"
 
 std::list<Eigen::Vector3d> waypoints_list;
@@ -26,12 +27,19 @@ ros::Subscriber traj_sub;
 ros::Publisher  traj_p_pub, traj_yaw_pub;
 
 
-void odom_cb(const quad_control::State::ConstPtr& odom_msg) {
+void odom_cb(const nav_msgs::Odometry::ConstPtr& odom_msg) {
 
-    Eigen::Vector3d p = Eigen::Vector3d(odom_msg->position.x,
-        odom_msg->position.y, odom_msg->position.z);
-    Eigen::Vector3d p_dot = Eigen::Vector3d(odom_msg->speed.x,
-        odom_msg->speed.y, odom_msg->speed.z);
+    Eigen::Quaterniond q = Eigen::Quaterniond( odom_msg->pose.pose.orientation.w,
+        odom_msg->pose.pose.orientation.x, odom_msg->pose.pose.orientation.y,
+        odom_msg->pose.pose.orientation.z);
+    
+    Eigen::Matrix3d RbNed = q.normalized().toRotationMatrix();
+
+    Eigen::Vector3d p = Eigen::Vector3d( odom_msg->pose.pose.position.x,
+        odom_msg->pose.pose.position.y, odom_msg->pose.pose.position.z );
+
+    Eigen::Vector3d p_dot = RbNed*Eigen::Vector3d( odom_msg->twist.twist.linear.x,
+        odom_msg->twist.twist.linear.y, odom_msg->twist.twist.linear.z);
 
     Eigen::Vector3d error = waypoints_list.front()-p;
     
