@@ -10,7 +10,7 @@ er_kf_dd: 3
 
 # innerloop parameters
 il_v:     25
-il_xi:    0.95
+il_xi:    0.99
 il_wn:    3
 
 # wrench estimator

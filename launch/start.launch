@@ -26,11 +26,12 @@
     <arg name="verbose" value="$(arg verbose)"/>
   </include>
 
+<!--
   <include file="$(find quad_control)/launch/octomap_server.launch">
       <arg name="mav_name" value="$(arg mav_name)" />
     </include>
 
-<!--
+
   <node name="rviz" pkg="rviz" type="rviz" args="-d $(find quad_control)/config/octomap.rviz"  />
 -->
 
@@ -88,6 +89,7 @@
 
     <include file="$(find quad_control)/launch/plot_juggler.launch"/>
 
+    <!--
     <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
     <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" />
 
@@ -95,6 +97,8 @@
     <node pkg="tf" type="static_transform_publisher" name="wNED" args="0 0 0 1.57079 0 3.14159  world worldNED  10"/>
     <node pkg="tf" type="static_transform_publisher" name="bodyNED" args="0 0 0 1.57079 0 3.14159  hummingbird/base_link hummingbird/base_linkNED  10"/>
     
+    
      <node name="rviz" pkg="rviz" type="rviz" args="-d $(find quad_control)/config/drone.rviz"  />
+     -->
   </group>
 </launch>
