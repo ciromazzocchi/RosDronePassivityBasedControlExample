@@ -54,6 +54,7 @@
       <param  name="threshold"      type="double" value="0.2"/>
       <param  name="ka"             type="double" value="0.5"/>
       <param  name="kf_d"           type="double" value="10"/>
+      <remap  from="/gazebo"        to="/gazebo/model_states"/>
       <remap  from="/p"             to="/$(arg mav_name)/ground_truth/odometryNED"/>
       <remap  from="/traj/p"        to="/$(arg mav_name)/trajectory/p"/>
       <remap  from="/traj/yaw"      to="/$(arg mav_name)/trajectory/yaw"/>
