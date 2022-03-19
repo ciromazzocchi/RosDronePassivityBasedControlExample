@@ -46,14 +46,14 @@ void gaz_cb(const gazebo_msgs::ModelStates::ConstPtr& msg) {
             double dist2 = (p2 - obj2).norm();
             double dist =  (p - obj).norm();
             if( dist2 <= rng_infl) {
-                //double c = (k_rep/dist/dist) * ((1/dist) - (1/rng_infl));
-                //f_rep = f_rep - c * (1/dist) * (p - obj).asDiagonal() * p_dot;
-                double c = (k_rep / (p - obj).squaredNorm()) * pow(1/dist - 1/rng_infl, 2);
-                f_rep = f_rep + c * (p - obj).normalized();
+                double c = (k_rep / (p2 - obj2).squaredNorm()) * pow(1/dist2 - 1/rng_infl, 1);
+                Vector3d f_temp;
+                f_temp << c * (p2 - obj2).normalized(), 0;
+                f_rep = f_rep + f_temp;
             }
         }
     }
-    ROS_ERROR_STREAM(f_rep.transpose());
+    //ROS_ERROR_STREAM(f_rep.transpose());
 }
 
 void odom_cb(const nav_msgs::Odometry::ConstPtr& odom_msg) {
@@ -75,6 +75,7 @@ void odom_cb(const nav_msgs::Odometry::ConstPtr& odom_msg) {
     if(error.norm() < threshold & p_dot.norm() < 0.5 & (waypoints_list.size()>1)) 
         waypoints_list.pop_front();
 
+    //ROS_ERROR_STREAM("n_waypoints" << waypoints_list.size());
     Vector3d position, speed, acceleration;
     speed = error * ka / (error.norm() > 1 ? error.norm() : 1 );
     speed = speed + f_rep;

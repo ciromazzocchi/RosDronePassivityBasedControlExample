@@ -1,8 +1,8 @@
 rate:     1000
 
 # planner
-rng_infl: 2
-k_rep:    1000
+rng_infl: 3
+k_rep:    10
 
 # outerloop parameters
 ol_xi:    0.9
