@@ -1,145 +1,69 @@
-cmake_minimum_required(VERSION 2.8.3)
-project(quad_control)
+# toplevel CMakeLists.txt for a catkin workspace
+# catkin/cmake/toplevel.cmake
 
-## Compile as C++11, supported in ROS Kinetic and newer
-add_compile_options(-std=c++11)
+cmake_minimum_required(VERSION 3.0.2)
 
-## Find catkin macros and libraries
-## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
-## is used, also find other catkin packages
+project(Project)
 
-include (FindPkgConfig)
-if (PKG_CONFIG_FOUND)
-    pkg_check_modules(GAZEBO gazebo)
+set(CATKIN_TOPLEVEL TRUE)
+
+# search for catkin within the workspace
+set(_cmd "catkin_find_pkg" "catkin" "${CMAKE_SOURCE_DIR}")
+execute_process(COMMAND ${_cmd}
+  RESULT_VARIABLE _res
+  OUTPUT_VARIABLE _out
+  ERROR_VARIABLE _err
+  OUTPUT_STRIP_TRAILING_WHITESPACE
+  ERROR_STRIP_TRAILING_WHITESPACE
+)
+if(NOT _res EQUAL 0 AND NOT _res EQUAL 2)
+  # searching fot catkin resulted in an error
+  string(REPLACE ";" " " _cmd_str "${_cmd}")
+  message(FATAL_ERROR "Search for 'catkin' in workspace failed (${_cmd_str}): ${_err}")
 endif()
 
-find_package(Eigen3 REQUIRED)
-include_directories(${Eigen_INCLUDE_DIRS})
+# include catkin from workspace or via find_package()
+if(_res EQUAL 0)
+  set(catkin_EXTRAS_DIR "${CMAKE_SOURCE_DIR}/${_out}/cmake")
+  # include all.cmake without add_subdirectory to let it operate in same scope
+  include(${catkin_EXTRAS_DIR}/all.cmake NO_POLICY_SCOPE)
+  add_subdirectory("${_out}")
 
-find_package(catkin REQUIRED COMPONENTS
-  eigen_conversions
-  gazebo_msgs
-  geometry_msgs
-  message_generation
-  message_runtime
-  nav_msgs
-  roscpp
-  roslib
-  std_msgs
-  tf
-  tf_conversions
-)
+else()
+  # use either CMAKE_PREFIX_PATH explicitly passed to CMake as a command line argument
+  # or CMAKE_PREFIX_PATH from the environment
+  if(NOT DEFINED CMAKE_PREFIX_PATH)
+    if(NOT "$ENV{CMAKE_PREFIX_PATH}" STREQUAL "")
+      if(NOT WIN32)
+        string(REPLACE ":" ";" CMAKE_PREFIX_PATH $ENV{CMAKE_PREFIX_PATH})
+      else()
+        set(CMAKE_PREFIX_PATH $ENV{CMAKE_PREFIX_PATH})
+      endif()
+    endif()
+  endif()
 
+  # list of catkin workspaces
+  set(catkin_search_path "")
+  foreach(path ${CMAKE_PREFIX_PATH})
+    if(EXISTS "${path}/.catkin")
+      list(FIND catkin_search_path ${path} _index)
+      if(_index EQUAL -1)
+        list(APPEND catkin_search_path ${path})
+      endif()
+    endif()
+  endforeach()
 
-## System dependencies are found with CMake's conventions
-# find_package(Boost REQUIRED COMPONENTS system)
+  # search for catkin in all workspaces
+  set(CATKIN_TOPLEVEL_FIND_PACKAGE TRUE)
+  find_package(catkin QUIET
+    NO_POLICY_SCOPE
+    PATHS ${catkin_search_path}
+    NO_DEFAULT_PATH NO_CMAKE_FIND_ROOT_PATH)
+  unset(CATKIN_TOPLEVEL_FIND_PACKAGE)
 
-################################################
-## Declare ROS messages, services and actions ##
-################################################
+  if(NOT catkin_FOUND)
+    message(FATAL_ERROR "find_package(catkin) failed. catkin was neither found in the workspace nor in the CMAKE_PREFIX_PATH. One reason may be that no ROS setup.sh was sourced before.")
+  endif()
+endif()
 
-## To declare and build messages, services or actions from within this
-## package, follow these steps:
-## * Let MSG_DEP_SET be the set of packages whose message types you use in
-##   your messages/services/actions (e.g. std_msgs, actionlib_msgs, ...).
-## * In the file package.xml:
-##   * add a build_depend tag for "message_generation"
-##   * add a build_depend and a exec_depend tag for each package in MSG_DEP_SET
-##   * If MSG_DEP_SET isn't empty the following dependency has been pulled in
-##     but can be declared for certainty nonetheless:
-##     * add a exec_depend tag for "message_runtime"
-## * In this file (CMakeLists.txt):
-##   * add "message_generation" and every package in MSG_DEP_SET to
-##     find_package(catkin REQUIRED COMPONENTS ...)
-##   * add "message_runtime" and every package in MSG_DEP_SET to
-##     catkin_package(CATKIN_DEPENDS ...)
-##   * uncomment the add_*_files sections below as needed
-##     and list every .msg/.srv/.action file to be processed
-##   * uncomment the generate_messages entry below
-##   * add every package in MSG_DEP_SET to generate_messages(DEPENDENCIES ...)
-
-# Generate messages in the 'msg' folder
-add_message_files(
-  FILES
-  State.msg
-)
-
-## Generate services in the 'srv' folder
-# add_service_files(
-#   FILES
-#     Service1.srv
-#     Service2.srv
-# )
-
-## Generate actions in the 'action' folder
-#add_action_files(
-#   FILES
-#	 nav.action
-#)
-
-## Generate added messages and services with any dependencies listed here
-generate_messages(
-   DEPENDENCIES
-   std_msgs
-   geometry_msgs
-   nav_msgs
-#   actionlib_msgs
-)
-
-###################################
-## catkin specific configuration ##
-###################################
-## The catkin_package macro generates cmake config files for your package
-## Declare things to be passed to dependent projects
-## INCLUDE_DIRS: uncomment this if your package contains header files
-## LIBRARIES: libraries you create in this project that dependent projects also need
-## CATKIN_DEPENDS: catkin_packages dependent projects also need
-## DEPENDS: system dependencies of this project that dependent projects also need
-catkin_package(
-#  INCLUDE_DIRS include
-#  LIBRARIES surveillance_task
-#  CATKIN_DEPENDS gazebo_msgs geometry_msgs roscpp roslib sensor_msgs
-#  DEPENDS system_lib
-)
-
-###########
-## Build ##
-###########
-
-## Specify additional locations of header files
-## Your package locations should be listed before other locations
-include_directories(
-  include
-  ${catkin_INCLUDE_DIRS}
-  ${GAZEBO_INCLUDE_DIRS}
-)
-
-link_directories(${GAZEBO_LIBRARY_DIRS})
-
-
-## Declare a C++ library
-#add_library(${PROJECT_NAME}
-#      FILES
-#)
-
-add_library(Differentiator  src/Utils/Differentiator.cpp)
-add_library(Utility  src/Utils/utility.cpp)
-
-## Declare a C++ executable
-add_executable(odometry_node src/Nodes/odometry_node.cpp)
-target_link_libraries(odometry_node Utility ${Eigen_INCLUDE_DIRS} ${catkin_LIBRARIES})
-
-add_executable(trajectory_node src/Nodes/trajectory_node.cpp)
-target_link_libraries(trajectory_node Utility ${Eigen_INCLUDE_DIRS} ${catkin_LIBRARIES})
-
-add_executable(outer_loop_node src/Nodes/outer_loop_node.cpp)
-target_link_libraries(outer_loop_node ${Eigen_INCLUDE_DIRS} ${catkin_LIBRARIES})
-
-add_executable(eta_reference_node src/Nodes/eta_reference_node.cpp)
-target_link_libraries(eta_reference_node Differentiator Utility ${Eigen_INCLUDE_DIRS} ${catkin_LIBRARIES})
-
-add_executable(inner_loop_node src/Nodes/inner_loop_node.cpp)
-target_link_libraries(inner_loop_node Utility Differentiator ${Eigen_INCLUDE_DIRS} ${catkin_LIBRARIES})
-
-add_executable(estimator_node src/Nodes/estimator_node.cpp)
-target_link_libraries(estimator_node Utility ${Eigen_INCLUDE_DIRS} ${catkin_LIBRARIES})
+catkin_workspace()
