@@ -26,7 +26,7 @@ std::list<Vector3d>::iterator actual_point;
 
 Vector3d p, p_dot;
 
-double threshold, ka, rate, psi, k_rep, rng_infl;
+double threshold, ka, rate, psi, k_rep, rng_infl, k_psi;
 double T_local;
 bool flag_local_minimum;
 
@@ -171,11 +171,17 @@ void odom_cb(const nav_msgs::Odometry::ConstPtr& odom_msg) {
     Vector3d position, speed, acceleration;
     
     speed = getFAtt(p) + getFRep(p) + getVirtualPoint(p);
+
     acceleration = acceleration_filter.getDifferentiatoredValue(speed);
     position = p + speed/rate;
 
-    if(error.x() >= 0.01)
-        psi = atan2(p.y(),p.x()) - M_PI_2 ;
+    //if(error.x() >= 0.01)
+    //    psi = atan2(p.y(),p.x()) - M_PI_2 ;
+
+    if(error.x() >= 0.001) {
+        //psi = (1-k_psi/rate)*psi  - (k_psi/rate)*( atan2(error.y(),error.x()));
+        psi = (1-k_psi/rate)*psi  - (k_psi/rate)*( atan2(error.x(),error.y()));
+    }
 
     quad_control::State msg1;
     tf::vectorEigenToMsg(position,      msg1.position);
@@ -201,6 +207,8 @@ int main(int argc, char **argv)
     double kf_d = nh.param<double>("kf_d", 100);
     rng_infl    = nh.param<double>("/rng_infl", 1);
     k_rep       = nh.param<double>("/k_rep", 1);
+    k_psi       = nh.param<double>("/k_psi", 1);
+
 
     T_local = 0;
     flag_local_minimum = false;
