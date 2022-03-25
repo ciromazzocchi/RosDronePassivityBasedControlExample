@@ -123,23 +123,29 @@ link_directories(${GAZEBO_LIBRARY_DIRS})
 #)
 
 add_library(Differentiator  src/Utils/Differentiator.cpp)
-add_library(Utility  src/Utils/utility.cpp)
+add_library(Utility         src/Utils/utility.cpp)
 
 ## Declare a C++ executable
 add_executable(odometry_node src/Nodes/odometry_node.cpp)
+add_dependencies(odometry_node quad_control_generate_messages_cpp)
 target_link_libraries(odometry_node Utility ${Eigen_INCLUDE_DIRS} ${catkin_LIBRARIES})
 
 add_executable(trajectory_node src/Nodes/trajectory_node.cpp)
+add_dependencies(trajectory_node quad_control_generate_messages_cpp)
 target_link_libraries(trajectory_node Utility ${Eigen_INCLUDE_DIRS} ${catkin_LIBRARIES})
 
 add_executable(outer_loop_node src/Nodes/outer_loop_node.cpp)
+add_dependencies(outer_loop_node quad_control_generate_messages_cpp)
 target_link_libraries(outer_loop_node ${Eigen_INCLUDE_DIRS} ${catkin_LIBRARIES})
 
 add_executable(eta_reference_node src/Nodes/eta_reference_node.cpp)
+add_dependencies(eta_reference_node quad_control_generate_messages_cpp)
 target_link_libraries(eta_reference_node Differentiator Utility ${Eigen_INCLUDE_DIRS} ${catkin_LIBRARIES})
 
 add_executable(inner_loop_node src/Nodes/inner_loop_node.cpp)
+add_dependencies(inner_loop_node quad_control_generate_messages_cpp)
 target_link_libraries(inner_loop_node Utility Differentiator ${Eigen_INCLUDE_DIRS} ${catkin_LIBRARIES})
 
 add_executable(estimator_node src/Nodes/estimator_node.cpp)
+add_dependencies(estimator_node quad_control_generate_messages_cpp)
 target_link_libraries(estimator_node Utility ${Eigen_INCLUDE_DIRS} ${catkin_LIBRARIES})
