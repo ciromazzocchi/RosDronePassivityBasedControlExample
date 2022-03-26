@@ -21,28 +21,15 @@ The estimation of extrernal wrench is achieved through a **momentum-based** firs
  $ sudo sh -c 'echo "deb http://packages.ros.org/ros/ubuntu `lsb_release -sc` main" > /etc/apt/sources.list.d/ros-latest.list'
  $ wget http://packages.ros.org/ros.key -O - | sudo apt-key add -
  $ sudo apt-get update
- $ sudo apt-get install ros-melodic-desktop-full ros-melodic-joy ros-melodic-octomap-ros ros-melodic-mavlink python-wstool python-catkin-tools protobuf-compiler libgoogle-glog-dev ros-melodic-control-toolbox ros-melodic-mavros
+ $ sudo apt-get install ros-melodic-desktop-full ros-melodic-joy ros-melodic-octomap ros-melodic-octomap-msgs ros-melodic-octomap-ros ros-melodic-mavlink python-wstool python-catkin-tools protobuf-compiler libgoogle-glog-dev ros-melodic-control-toolbox ros-melodic-mavros ros-melodic-mav-msgs ros-melodic-map-server
  $ sudo rosdep init
  $ rosdep update
  $ source /opt/ros/melodic/setup.bash
  ```
 
- 2. Besides basic ros and gazebo packages, you also need to install the following
-ones:
-
-```
-    ros-melodic-octomap
-    ros-melodic-octomap-msgs
-    ros-melodic-octomap-ros
-    ros-melodic-mavlink
-    ros-melodic-mavros
-    ros-melodic-mav-msgs
-    ros-melodic-map-server
-    libgoogle-glog-dev
-```
 **Please note**: This project has been developed and tested on Ubuntu 18.04 LTS, with ROS Melodic and Gazebo 9.0. It *could* work also on the newest versions of the softwares, but this has not been tested and thus is not guaranteed.
 
- 3. If you don't have ROS workspace yet you can do so by
+ 2. If you don't have ROS workspace yet you can do so by
 
  ```
  $ mkdir -p ~/catkin_ws/src
@@ -52,14 +39,14 @@ ones:
 
   > **Note** On OS X you need to install yaml-cpp using Homebrew `brew install yaml-cpp`.
 
- 4. Build your workspace with `python_catkin_tools` (therefore you need `python_catkin_tools`)
+ 3. Build your workspace with `python_catkin_tools` (therefore you need `python_catkin_tools`)
 
    ```
    $ cd ~/catkin_ws/
    $ catkin build
    ```
 
- 5. Add sourcing to your `.bashrc` file
+ 4. Add sourcing to your `.bashrc` file
 
    ```
    $ echo "source ~/catkin_ws/devel/setup.bash" >> ~/.bashrc
