@@ -1,57 +1,92 @@
-# Quadrotor Library
-The *ned_plugin* folder contains the source code for the *ned_conv* gazebo world plugin used to convert the ENU odometry and Force/Torque commands into NED ones. This plugin is already included in the provided *arena.world* file.  
-You can put your code (the planner and the controller that you will create) inside the *quad_control* folder.  
-All the other folders are from the [RotorS MAV simulator](https://github.com/ethz-asl/rotors_simulator) and provide the dynamic Gazebo model of the [AscTec Hummingbird](http://www.asctec.de/en/uav-uas-drone-products/asctec-hummingbird/) quadcopter.
+# FSR Technical project
+This is the technical project for the Field and Service Robotics exam, at
+University Federico II of Naples.
 
-## Prerequisites
-You will need all the packages on which the RotorS library already depends.
-For the mathematical computation, is also needed the Eigen library http://eigen.tuxfamily.org/.
+![Image of the main scene](quad_control/doc/scene.png)
 
-## Installation instructions - Ubuntu 18.04 with ROS Melodic
- 1. Create a ROS workspace and clone this repository inside *your_workspace/src* folder. Make sure that all the folders in this repository are directly inside the *src* folder.  
-    Compile all these ros packages inside the workspace with the following command (you may need to install others ROS dependencies if some errors appears during the compilation):
-    ```
-    $ catkin_make
-    ```
+## Introduction
+The aim of this project is to develop a system able to perform motion planning
+and control for a **VTOL UAV**. In particular, an *AscTec Hummingbird*
+quadcopter has been considered; however, the system can work with any
+other UAV.
 
-## Usage and testing
- 1. Use the provided launchfile to open the gazebo scene and Rviz:
-    ```
-    $ roslaunch quad_control mymav.launch
-    ```
+Motion planning is performed via **artificial potential** method, with a custom
+**virtual point**-based algorithm to avoid local minima.
+The control is achieved through a **passivity-based hierarchical controller**.
+The estimation of extrernal wrench is achieved through a **momentum-based** first-order estimator.
 
- 2. You will need to create your flying arena in Gazebo. To do that, you can just modify the *arena.world* file inside *quad_control/worlds* folder.
-    - **NB.** If you already have your own .world file working in simulation with the RotorS Hummingbird quadrotor, you can just add inside your .world file, between the `<world></world>` tags, the following line. This is the plugin you obtain when compiling the *ned_plugin* folder. This plugin creates the two topics explained at (4).
-    ```
-     <plugin name='ned_conversions' filename='libned_conv.so'/>
-    ```
+## Installation Instructions - Ubuntu 18.04 with ROS Melodic
+---------------------------------------------------------
+ 1. Install and initialize ROS melodic desktop full, additional ROS packages, catkin-tools, and wstool:
 
- 3. The two most important reference frames are **worldNED** and **hummingbird/base_linkNED**. The goal of the project is to generate a trajectory and control the quadrotor in order to move the **hummingbird/base_linkNED** (attached to the quadrotor body) with respect to **worldNED** (the fixed frame in the world).
+ ```
+ $ sudo sh -c 'echo "deb http://packages.ros.org/ros/ubuntu `lsb_release -sc` main" > /etc/apt/sources.list.d/ros-latest.list'
+ $ wget http://packages.ros.org/ros.key -O - | sudo apt-key add -
+ $ sudo apt-get update
+ $ sudo apt-get install ros-melodic-desktop-full ros-melodic-joy ros-melodic-octomap-ros ros-melodic-mavlink python-wstool python-catkin-tools protobuf-compiler libgoogle-glog-dev ros-melodic-control-toolbox ros-melodic-mavros
+ $ sudo rosdep init
+ $ rosdep update
+ $ source /opt/ros/melodic/setup.bash
+ ```
 
- 4. As an interface with the Gazebo simulation, you should use two topics:
-    * */hummingbird/ground_truth/odometryNED*: from here you can get all the odometry informations you need about the quadrotor (position and velocity), in particular those related to the **hummingbird/base_linkNED** frame. The linear and angular positions are with respect to the world frame (worldNED). The linear and angular velocities are with respect to the **body frame**, remember that when using these data.
-      - **NB.** If you need the velocity data with respect to the world frame, instead of the body frame, remember that you can premultiply the velocities by the body rotation matrix *R_b*. You can obtain this matrix directly from the orientation quaternion in the *pose* part of the odometry message.
-    
-    * */hummingbird/command/wrenchNED*: on this topic you should publish the command forces and torques you want to apply on the quadrotor body that your control algorithm produces. This topic acceptes an entire wrench as input, but remember that **you cannot apply linear forces along the x and y directions, so those forces will not be considered by the quadrotor**. You have to use the z-component of the linear force and the 3 torques to control the quadrotor.
+ 2. Besides basic ros and gazebo packages, you also need to install the following
+ones:
 
-5. You can create your flying controller and planner in the quad_control folder. Just adjust the CMake file to your needs.
+```
+    ros-melodic-octomap
+    ros-melodic-octomap-msgs
+    ros-melodic-octomap-ros
+    ros-melodic-mavlink
+    ros-melodic-mavros
+    ros-melodic-mav-msgs
+    ros-melodic-map-server
+    libgoogle-glog-dev
+```
+**Please note**: This project has been developed and tested on Ubuntu 18.04 LTS, with ROS Melodic and Gazebo 9.0. It *could* work also on the newest versions of the softwares, but this has not been tested and thus is not guaranteed.
 
-## Quadrotor parameters
- The only parameters your should need are the Inertia matrix `I=diag(0.007, 0.007, 0.012) Kg m^2` and the quadrotor mass `m=0.68 Kg`. Since you can control the quadrotor directly with a wrench command, you don't need the allocation matrix.
+ 3. If you don't have ROS workspace yet you can do so by
 
-## Pro Tips
+ ```
+ $ mkdir -p ~/catkin_ws/src
+ $ cd ~/catkin_ws/src
+ $ catkin_init_workspace  # initialize your catkin workspace
+ ```
 
-  1. Once you have created a trajectory planner, you can easily check your trajectory by publishing it with a **nav_msgs/Path** message type. This kind of message can be printed from rviz and provides a useful visual feedback to check if the planner is working as expected.
+  > **Note** On OS X you need to install yaml-cpp using Homebrew `brew install yaml-cpp`.
 
-  2. You can record all the topics in your simulation in a bagfile with the following command:
-     ```
-     $ rosbag record -a -O bagFileName
-     ```
+ 4. Build your workspace with `python_catkin_tools` (therefore you need `python_catkin_tools`)
 
-  3. Once you have recorded the bagfile, you can plot all the collected data with **rqt_bag**. This can be useful to debug your applications and to obtain the plots for your technical report.
-     ```
-     $ rosrun rqt_bag rqt_bag
-     ```
+   ```
+   $ cd ~/catkin_ws/
+   $ catkin build
+   ```
 
-## Acknowledgements
-The code in the folders *ned_plugin* and *quad_control* has been created by [Eugenio Cuniato](https://github.com/ecuniato) under the supervision of [Fabio Ruggiero](http://www.fabioruggiero.name/web/index.php/en) and [Jonathan Cacace](http://wpage.unina.it/jonathan.cacace/).
+ 5. Add sourcing to your `.bashrc` file
+
+   ```
+   $ echo "source ~/catkin_ws/devel/setup.bash" >> ~/.bashrc
+   $ source ~/.bashrc
+   ```
+
+**Please note**: it is possible that the package will not compile on the first
+attempt. This is due to a weird behaviour of catkin_make, that compiles custom
+msgs *after* the nodes. To solve this problem, open
+[quad_control/CMakeLists.txt](quad_control/CMakeLists.txt), comment out the
+lines (164 - 178), and compile: this will only compile the messages. Then,
+uncomment those lines and compile again. This issue could be solved using
+another package that only contains the messages.
+
+## Play the scene
+In order to play the provided scene, use the main launch file:
+```
+    roslaunch quad_control start.launch
+```
+
+If order to scope uav signals, set **scope** as true
+```
+    roslaunch quad_control start.launch scope:=true
+```
+
+## In detail documentation
+In the doc folder you can find [a detailed report](quad_control/doc/Report.pdf)
+on the project and [a video demonstration](quad_control/doc/video.mp4).
