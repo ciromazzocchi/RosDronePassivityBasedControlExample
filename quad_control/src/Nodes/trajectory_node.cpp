@@ -26,7 +26,7 @@ std::list<Vector3d>::iterator actual_point;
 
 Vector3d p, p_dot;
 
-double threshold, ka, rate, psi, k_rep, rng_infl, k_psi;
+double threshold, k_att, rate, psi, k_rep, rng_infl, k_psi;
 double T_local;
 bool flag_local_minimum;
 
@@ -39,7 +39,7 @@ Matrix3d R_NED;
 
 Vector3d getFAtt(Vector3d p_uav) {
     Vector3d error = waypoints_list.front()-p_uav;
-    Vector3d f_att = error * ka / (error.norm() > 1 ? error.norm() : 1 );
+    Vector3d f_att = error * k_att / (error.norm() > 1 ? error.norm() : 1 );
     return f_att;
 }
 
@@ -161,7 +161,6 @@ void odom_cb(const nav_msgs::Odometry::ConstPtr& odom_msg) {
 
     if(error.norm() > threshold & p_dot.norm() < 0.05) {
         T_local = T_local + 1/rate;
-        ROS_ERROR_STREAM("T_local " << T_local << " trapping point " << trapping_point.size());
         if(T_local > 1) {
             add_trapping_point();
             T_local = 0;
@@ -203,13 +202,12 @@ int main(int argc, char **argv)
     psi = 0;
 
     threshold   = nh.param<double>("/threshold", 0.01);
-    ka          = nh.param<double>("/ka", 10);
+    k_att          = nh.param<double>("/k_att", 10);
     rate        = nh.param<double>("/rate", 1000);
     double kf_d = nh.param<double>("/pl_kf_d", 100);
     rng_infl    = nh.param<double>("/rng_infl", 1);
     k_rep       = nh.param<double>("/k_rep", 1);
     k_psi       = nh.param<double>("/k_psi", 1);
-
 
     T_local = 0;
     flag_local_minimum = false;

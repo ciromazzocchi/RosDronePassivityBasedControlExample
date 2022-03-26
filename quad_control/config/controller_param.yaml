@@ -3,7 +3,7 @@ rate:     1000
 # planner
 rng_infl:   3
 threshold:  0.2
-ka:         0.5
+k_att:      0.5
 k_rep:      10
 k_psi:      0.5
 pl_kf_d:    10
