@@ -29,30 +29,32 @@ The estimation of extrernal wrench is achieved through a **momentum-based** firs
 
 **Please note**: This project has been developed and tested on Ubuntu 18.04 LTS, with ROS Melodic and Gazebo 9.0. It *could* work also on the newest versions of the softwares, but this has not been tested and thus is not guaranteed.
 
- 2. If you don't have ROS workspace yet you can do so by
-
- ```
- $ mkdir -p ~/catkin_ws/src
- $ cd ~/catkin_ws/src
- $ catkin_init_workspace  # initialize your catkin workspace
- ```
-
-  > **Note** On OS X you need to install yaml-cpp using Homebrew `brew install yaml-cpp`.
-
- 3. Build your workspace with `python_catkin_tools` (therefore you need `python_catkin_tools`)
+  2. If you don't have ROS workspace yet you can do so by
 
    ```
-   $ cd ~/catkin_ws/
-   $ catkin build
+    $ mkdir -p ~/catkin_ws/src
+    $ cd ~/catkin_ws/src
+    $ catkin_init_workspace  # initialize your catkin workspace
    ```
 
- 4. Add sourcing to your `.bashrc` file
+    > **Note** On OS X you need to install yaml-cpp using Homebrew `brew install yaml-cpp`.
 
-   ```
-   $ echo "source ~/catkin_ws/devel/setup.bash" >> ~/.bashrc
-   $ source ~/.bashrc
-   ```
+  3. Copy all proget folder inside the src folder and compile
 
+  4. Build your workspace with `python_catkin_tools` (therefore you need `python_catkin_tools`)
+
+    ```
+      $ cd ~/catkin_ws/
+      $ catkin build
+    ```
+
+  5. Add sourcing to your `.bashrc` file
+
+    ```
+      $ echo "source ~/catkin_ws/devel/setup.bash" >> ~/.bashrc
+      $ source ~/.bashrc
+    ```
+    
 **Please note**: it is possible that the package will not compile on the first
 attempt. This is due to a weird behaviour of catkin_make, that compiles custom
 msgs *after* the nodes. To solve this problem, open
