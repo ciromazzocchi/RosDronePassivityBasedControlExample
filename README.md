@@ -2,8 +2,6 @@
 This is the technical project for the Field and Service Robotics exam, at
 University Federico II of Naples.
 
-![Image of the main scene](quad_control/doc/scene.png)
-
 ## Introduction
 The aim of this project is to develop a system able to perform motion planning
 and control for a **VTOL UAV**. In particular, an *AscTec Hummingbird*
