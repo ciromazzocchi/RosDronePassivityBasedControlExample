@@ -1,9 +1,5 @@
 <launch>
-  <arg name="mav_name" default="hummingbird"/>
-  <arg name="world_name" default="arena_with_columns"/>
-  <arg name="enable_logging" default="false" />
-  <arg name="enable_ground_truth" default="true" />
-  <arg name="log_file" default="$(arg mav_name)" />
+  <arg name="log_file" default="hummingbird" />
   <arg name="debug" default="false"/>
   <arg name="gui" default="true"/>
   <arg name="paused" default="false"/>
@@ -11,6 +7,8 @@
       (even when Gazebo is started through roslaunch) -->
   <arg name="verbose" default="false"/>
   <arg name="use_sim_time" default="true" />
+  <arg name="scope" default="false" />
+
   
   <!-- Controller parameters -->
   <rosparam file="$(find quad_control)/config/drone_param.yaml" />
@@ -19,76 +17,61 @@
   <env name="GAZEBO_MODEL_PATH" value="${GAZEBO_MODEL_PATH}:$(find rotors_gazebo)/models"/>
   <env name="GAZEBO_RESOURCE_PATH" value="${GAZEBO_RESOURCE_PATH}:$(find rotors_gazebo)/models"/>
   <include file="$(find gazebo_ros)/launch/empty_world.launch">
-    <arg name="world_name" value="$(find quad_control)/worlds/$(arg world_name).world" />
+    <arg name="world_name" value="$(find quad_control)/worlds/arena_with_columns.world" />
     <arg name="debug" value="$(arg debug)" />
     <arg name="paused" value="$(arg paused)" />
     <arg name="gui" value="$(arg gui)" />
     <arg name="verbose" value="$(arg verbose)"/>
+    <arg name="use_sim_time" default="true"/>
   </include>
 
-<!--
-  <include file="$(find quad_control)/launch/octomap_server.launch">
-      <arg name="mav_name" value="$(arg mav_name)" />
-    </include>
-
-
-  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find quad_control)/config/octomap.rviz"  />
--->
-
-  <group ns="$(arg mav_name)">
+  <group ns="hummingbird">
     <include file="$(find rotors_gazebo)/launch/spawn_mav.launch">
-      <arg name="mav_name" value="$(arg mav_name)" />
-      <arg name="model" value="$(find quad_control)/urdf/mav_with_vi_sensor.gazebo" />
-      <arg name="enable_logging" value="$(arg enable_logging)" />
-      <arg name="enable_ground_truth" value="$(arg enable_ground_truth)" />
+      <arg name="mav_name" value="hummingbird" />
+      <arg name="model" value="$(find rotors_description)/urdf/mav_generic_odometry_sensor.gazebo" />
       <arg name="log_file" value="$(arg log_file)"/>
     </include>
 
     <node name="odometry_node" type="odometry_node" pkg="quad_control">
-      <remap  from="/odometry"      to="/$(arg mav_name)/ground_truth/odometryNED"/>
-      <remap  from="/p"             to="/$(arg mav_name)/odometryNED/p"/>
-      <remap  from="/eta"           to="/$(arg mav_name)/odometryNED/eta"/>
+      <remap  from="/odometry"      to="/hummingbird/ground_truth/odometryNED"/>
+      <remap  from="/p"             to="/hummingbird/odometryNED/p"/>
+      <remap  from="/eta"           to="/hummingbird/odometryNED/eta"/>
     </node> 
 
     <node name="trajectory_node" type="trajectory_node" pkg="quad_control">
-      <param  name="threshold"      type="double" value="0.2"/>
-      <param  name="ka"             type="double" value="0.5"/>
-      <param  name="kf_d"           type="double" value="10"/>
       <remap  from="/gazebo"        to="/gazebo/model_states"/>
-      <remap  from="/p"             to="/$(arg mav_name)/ground_truth/odometryNED"/>
-      <remap  from="/traj/p"        to="/$(arg mav_name)/trajectory/p"/>
-      <remap  from="/traj/yaw"      to="/$(arg mav_name)/trajectory/yaw"/>
+      <remap  from="/p"             to="/hummingbird/ground_truth/odometryNED"/>
+      <remap  from="/traj/p"        to="/hummingbird/trajectory/p"/>
+      <remap  from="/traj/yaw"      to="/hummingbird/trajectory/yaw"/>
     </node>
 
     <node name="outer_loop_node" type="outer_loop_node" pkg="quad_control">
-      <remap  from="/traj_topic"    to="/$(arg mav_name)/trajectory/p"/>
-      <remap  from="/odom_topic"    to="/$(arg mav_name)/odometryNED/p"/>
-      <remap  from="/est_topic"     to="/$(arg mav_name)/estimator"/>
-      <remap  from="/mu_hat"        to="/$(arg mav_name)/mu_hat"/>
+      <remap  from="/traj_topic"    to="/hummingbird/trajectory/p"/>
+      <remap  from="/odom_topic"    to="/hummingbird/odometryNED/p"/>
+      <remap  from="/est_topic"     to="/hummingbird/estimator"/>
+      <remap  from="/mu_hat"        to="/hummingbird/mu_hat"/>
     </node>
 
     <node name="eta_reference_node" type="eta_reference_node" pkg="quad_control">
-      <remap  from="/sub_topic"     to="/$(arg mav_name)/mu_hat"/>
-      <remap  from="/traj_topic"    to="/$(arg mav_name)/trajectory/yaw"/>
-      <remap  from="/eta_ref_topic" to="/$(arg mav_name)/eta_reference"/>
+      <remap  from="/sub_topic"     to="/hummingbird/mu_hat"/>
+      <remap  from="/traj_topic"    to="/hummingbird/trajectory/yaw"/>
+      <remap  from="/eta_ref_topic" to="/hummingbird/eta_reference"/>
     </node>
 
     <node name="inner_loop_node" type="inner_loop_node" pkg="quad_control">
-      <remap  from="/eta_ref_topic" to="/$(arg mav_name)/eta_reference"/>
-      <remap  from="/odom_topic"    to="/$(arg mav_name)/odometryNED/eta"/>
-      <remap  from="/mu_topic"      to="/$(arg mav_name)/mu_hat" />
-      <remap  from="/est_topic"     to="/$(arg mav_name)/estimator" />
-      <remap  from="/pub_topic"     to="/$(arg mav_name)/command/wrenchNED"/>
+      <remap  from="/eta_ref_topic" to="/hummingbird/eta_reference"/>
+      <remap  from="/odom_topic"    to="/hummingbird/odometryNED/eta"/>
+      <remap  from="/mu_topic"      to="/hummingbird/mu_hat" />
+      <remap  from="/est_topic"     to="/hummingbird/estimator" />
+      <remap  from="/pub_topic"     to="/hummingbird/command/wrenchNED"/>
     </node>
 
     <node name="estimator_node" type="estimator_node" pkg="quad_control">
-      <remap  from="/eta"           to="/$(arg mav_name)/odometryNED/eta" />
-      <remap  from="/p"             to="/$(arg mav_name)/odometryNED/p"/>
-      <remap  from="/cmd"           to="/$(arg mav_name)/command/wrenchNED"/>
-      <remap  from="/est_topic"     to="/$(arg mav_name)/estimator"/>
+      <remap  from="/eta"           to="/hummingbird/odometryNED/eta" />
+      <remap  from="/p"             to="/hummingbird/odometryNED/p"/>
+      <remap  from="/cmd"           to="/hummingbird/command/wrenchNED"/>
+      <remap  from="/est_topic"     to="/hummingbird/estimator"/>
     </node>
-
-    <include file="$(find quad_control)/launch/plot_juggler.launch"/>
 
     <!--
     <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
@@ -102,4 +85,8 @@
      <node name="rviz" pkg="rviz" type="rviz" args="-d $(find quad_control)/config/drone.rviz"  />
      -->
   </group>
+
+  <node name="plotjuggler" pkg="plotjuggler" type="plotjuggler" 
+      args="--layout $(find quad_control)/config/plotJugglerConfig.xml" 
+      if="$(arg scope)"/>
 </launch>

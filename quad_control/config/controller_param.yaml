@@ -1,9 +1,12 @@
 rate:     1000
 
 # planner
-rng_infl: 3
-k_rep:    10
-k_psi:    0.5
+rng_infl:   3
+threshold:  0.2
+ka:         0.5
+k_rep:      10
+k_psi:      0.5
+pl_kf_d:    10
 
 # outerloop parameters
 ol_xi:    0.707

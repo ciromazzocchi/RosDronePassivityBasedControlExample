@@ -159,8 +159,9 @@ void odom_cb(const nav_msgs::Odometry::ConstPtr& odom_msg) {
     if(error.norm() < threshold & p_dot.norm() < 0.5 & (waypoints_list.size()>1)) 
         waypoints_list.pop_front();
 
-    if(error.norm() > threshold & p_dot.norm() < 0.1) {
+    if(error.norm() > threshold & p_dot.norm() < 0.05) {
         T_local = T_local + 1/rate;
+        ROS_ERROR_STREAM("T_local " << T_local << " trapping point " << trapping_point.size());
         if(T_local > 1) {
             add_trapping_point();
             T_local = 0;
@@ -201,10 +202,10 @@ int main(int argc, char **argv)
 
     psi = 0;
 
-    threshold   = nh.param<double>("threshold", 0.01);
-    ka          = nh.param<double>("ka", 10);
+    threshold   = nh.param<double>("/threshold", 0.01);
+    ka          = nh.param<double>("/ka", 10);
     rate        = nh.param<double>("/rate", 1000);
-    double kf_d = nh.param<double>("kf_d", 100);
+    double kf_d = nh.param<double>("/pl_kf_d", 100);
     rng_infl    = nh.param<double>("/rng_infl", 1);
     k_rep       = nh.param<double>("/k_rep", 1);
     k_psi       = nh.param<double>("/k_psi", 1);
