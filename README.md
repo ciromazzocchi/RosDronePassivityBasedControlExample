@@ -21,7 +21,7 @@ The estimation of extrernal wrench is achieved through a **momentum-based** firs
  $ sudo sh -c 'echo "deb http://packages.ros.org/ros/ubuntu `lsb_release -sc` main" > /etc/apt/sources.list.d/ros-latest.list'
  $ wget http://packages.ros.org/ros.key -O - | sudo apt-key add -
  $ sudo apt-get update
- $ sudo apt-get install ros-melodic-desktop-full ros-melodic-joy ros-melodic-octomap ros-melodic-octomap-msgs ros-melodic-octomap-ros ros-melodic-mavlink python-wstool python-catkin-tools protobuf-compiler libgoogle-glog-dev ros-melodic-control-toolbox ros-melodic-mavros ros-melodic-mav-msgs ros-melodic-map-server
+ $ sudo apt-get install ros-melodic-desktop-full ros-melodic-joy ros-melodic-octomap ros-melodic-octomap-msgs ros-melodic-octomap-ros ros-melodic-mavlink python-wstool python-catkin-tools protobuf-compiler libgoogle-glog-dev ros-melodic-control-toolbox ros-melodic-mavros ros-melodic-mav-msgs ros-melodic-map-server ros-melodic-plotjuggler ros-melodic-plotjuggler-ros
  $ sudo rosdep init
  $ rosdep update
  $ source /opt/ros/melodic/setup.bash
