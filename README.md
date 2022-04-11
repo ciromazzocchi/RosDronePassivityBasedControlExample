@@ -75,5 +75,5 @@ If order to scope uav signals, set **scope** as true
 ```
 
 ## In detail documentation
-In the doc folder you can find [a detailed report](quad_control/doc/Report.pdf)
-on the project and [a video demonstration](quad_control/doc/video.mp4).
+In the doc folder you can find [a detailed report](quad_control/doc/report.pdf)
+on the project and [a video demonstration](quad_control/doc/gazebo_simulation.mp4).
