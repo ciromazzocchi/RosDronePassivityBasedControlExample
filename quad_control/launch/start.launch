@@ -16,7 +16,7 @@
   <group ns="hummingbird">
     <include file="$(find rotors_gazebo)/launch/spawn_mav.launch">
       <arg name="mav_name" value="hummingbird" />
-      <arg name="model" value="$(find rotors_description)/urdf/mav_generic_odometry_sensor.gazebo" />
+      <arg name="model" value="$(find rotors_description)/urdf/mav_with_vi_sensor.gazebo" />
       <arg name="log_file" value="hummingbird"/>
     </include>
 
